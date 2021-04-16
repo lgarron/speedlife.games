@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="./index.ts" defer></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <board></board>
+  <demo><br><br>
+    <table style="display: inline-block; vertical-align: middle;">
+      <tr>
+        <td class="dead-now">
+          <div class="dot"></div>
+        </td>
+      </tr>
+    </table> Dead (staying dead)
+    <br>
+    <table style="display: inline-block; vertical-align: middle;">
+      <tr>
+        <td class="dead-now alive-next">
+          <div class="dot"></div>
+        </td>
+      </tr>
+    </table> Dead now, alive next
+    <br>
+    <table style="display: inline-block; vertical-align: middle;">
+      <tr>
+        <td class="alive-now">
+          <div class="dot"></div>
+        </td>
+      </tr>
+    </table> Alive (staying alive)
+    <br>
+    <table style="display: inline-block; vertical-align: middle;">
+      <tr>
+        <td class="alive-now dead-next">
+          <div class="dot"></div>
+        </td>
+      </tr>
+    </table> Alive now, dead next (shell)
+  </demo>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: sans-serif;
+}
+
+html {
+  display: grid;
+  place-content: center;
+}
+
+table {
+  background-color: black;
+}
+
+td {
+  border: 1px solid #888;
+  border: 1px solid #888;
+  width: 2em;
+  height: 2em;
+}
+
+.dot {
+  width: 90%;
+  height: 90%;
+  margin: 5%;
+  border-radius: 100%;
+}
+
+td {
+  cursor: pointer;
+  background: #fdb;
+  border: none;
+}
+
+td:hover {
+  background: #fb7;
+}
+
+td.alive-now .dot {
+  background: black;
+}
+
+td.alive-next:not(.alive-now) .dot {
+  background: white;
+  border: 1px solid;
+}
+
+td.alive-now.dead-next .dot {
+  background-color: red;
+  background: repeating-linear-gradient(
+    -45deg,
+    red,
+    red 0.1em,
+    rgba(255, 0, 0, 0.5) 0.1em,
+    rgba(255, 0, 0, 0.5) 0.2em
+  );
+  border: 1px solid;
+}
