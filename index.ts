@@ -3,22 +3,28 @@ const NUM_ROWS = 8;
 const deltas = [-1, 0, 1];
 
 class Cell {
-  aliveNow: boolean | null = false;
-  aliveNext: boolean | null = null;
+  aliveNow: boolean = false;
+  aliveNext: boolean = false;
   dot = document.createElement("div");
   neighbors: Cell[] = [];
+  markedChecked = false;
   constructor(public td: HTMLTableCellElement) {
     this.td.addEventListener("click", this.onclick.bind(this));
+    (this.td as any).cell = this; // for debugging
 
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.1) {
       this.toggleAliveNow();
     }
+    this.aliveNext = this.aliveNow;
 
     this.dot.classList.add("dot");
     this.td.appendChild(this.dot);
   }
 
   onclick(): void {
+    if (this.markChecked) {
+      markChecked(false);
+    }
     this.toggleAliveNext();
     // for (const neighbor of this.neighbors) {
     //   neighbor.update();
@@ -26,14 +32,42 @@ class Cell {
   }
 
   toggleAliveNow(): void {
-    this.aliveNext = !this.aliveNext;
-    this.td.classList.toggle("alive-now", this.aliveNext);
+    this.aliveNow = !this.aliveNow;
+    this.td.classList.toggle("alive-now", this.aliveNow);
   }
 
   toggleAliveNext(): void {
     this.aliveNext = !this.aliveNext;
     this.td.classList.toggle("alive-next", this.aliveNext);
     this.td.classList.toggle("dead-next", !this.aliveNext);
+  }
+
+  countNeighborsAliveNow(): number {
+    let num = 0;
+    for (const neighbor of this.neighbors) {
+      num += neighbor.aliveNow ? 1 : 0;
+    }
+    return num;
+  }
+
+  markChecked(mark: boolean): void {
+    console.log(this, mark);
+    if (!mark) {
+      this.td.classList.remove("correct");
+      this.td.classList.remove("incorrect");
+      this.markedChecked = false;
+      return;
+    }
+
+    const numNeighborsALiveNow = this.countNeighborsAliveNow();
+    const shouldBeAliveNext =
+      numNeighborsALiveNow > 1 && numNeighborsALiveNow < 4;
+    if (shouldBeAliveNext === this.aliveNext) {
+      this.td.classList.add("correct");
+    } else {
+      this.td.classList.add("incorrect");
+    }
+    this.markedChecked = true;
   }
 
   // update(): void {}
@@ -70,5 +104,18 @@ for (let i = 0; i < NUM_ROWS; i++) {
     }
   }
 }
+
+function markChecked(mark: boolean): void {
+  for (let i = 0; i < NUM_ROWS; i++) {
+    for (let j = 0; j < NUM_COLS; j++) {
+      cells[i][j].markChecked(mark);
+    }
+  }
+}
+
+document.querySelector("#check").addEventListener("click", () => {
+  console.log;
+  markChecked(true);
+});
 
 // console.log(cells);

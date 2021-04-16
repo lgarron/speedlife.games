@@ -58,3 +58,11 @@ td.alive-now.dead-next .dot {
   );
   border: 1px solid;
 }
+
+.correct {
+  background: lime !important;
+}
+
+.incorrect {
+  background: red !important;
+}
