@@ -97,7 +97,6 @@ for (let i = 0; i < NUM_ROWS; i++) {
         }
         const t = cells[i + di];
         if (t) {
-          // console.log(i, di, j, dj, t[j + dj]);
           t[j + dj]?.neighbors.push(cells[i][j]);
         }
       }
@@ -117,5 +116,3 @@ document.querySelector("#check").addEventListener("click", () => {
   console.log;
   markChecked(true);
 });
-
-// console.log(cells);
