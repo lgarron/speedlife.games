@@ -11,5 +11,3 @@ export function selectWithoutReplacement<T>(arr: T[], n: number): T[] {
   }
   return output;
 }
-
-selectWithoutReplacement([1, 2, 3, 4, 5], 3);
