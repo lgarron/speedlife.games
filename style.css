@@ -157,7 +157,7 @@ code {
 }
 
 body:not(.timed) .for-timed {
-  display: hidden;
+  display: none !important;
 }
 
 #stats {
