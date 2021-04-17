@@ -12,7 +12,10 @@ const NUM_COLS = getNumParam("cols", 6);
 const NUM_ROWS = getNumParam("rows", 6);
 const deltas = [-1, 0, 1];
 
-const DEFAULT_INITIAL_ALIVE = Math.floor(Math.sqrt(NUM_COLS * NUM_ROWS) * 1.5);
+const FACTOR = 1.2;
+const DEFAULT_INITIAL_ALIVE = Math.floor(
+  Math.sqrt(NUM_COLS * NUM_ROWS) * FACTOR
+);
 const NUM_INITIAL_ALIVE = getNumParam("alive", DEFAULT_INITIAL_ALIVE);
 
 class Cell {
@@ -40,18 +43,15 @@ class Cell {
       markChecked(false);
     }
     this.toggleAliveNext();
-    // for (const neighbor of this.neighbors) {
-    //   neighbor.update();
-    // }
   }
 
-  toggleAliveNow(): void {
-    this.aliveNow = !this.aliveNow;
+  toggleAliveNow(value: boolean = undefined): void {
+    this.aliveNow = value ?? !this.aliveNow;
     this.td.classList.toggle("alive-now", this.aliveNow);
   }
 
-  toggleAliveNext(): void {
-    this.aliveNext = !this.aliveNext;
+  toggleAliveNext(value: boolean = undefined): void {
+    this.aliveNext = value ?? !this.aliveNext;
     this.td.classList.toggle("alive-next", this.aliveNext);
     this.td.classList.toggle("dead-next", !this.aliveNext);
   }
@@ -64,23 +64,34 @@ class Cell {
     return num;
   }
 
+  shouldBeAliveNext(): boolean {
+    const numNeighborsAliveNow = this.countNeighborsAliveNow();
+    return numNeighborsAliveNow > 1 && numNeighborsAliveNow < 4;
+  }
+
   markChecked(mark: boolean): void {
+    this.td.classList.remove("correct");
+    this.td.classList.remove("incorrect");
     if (!mark) {
-      this.td.classList.remove("correct");
-      this.td.classList.remove("incorrect");
       this.markedChecked = false;
       return;
     }
 
-    const numNeighborsALiveNow = this.countNeighborsAliveNow();
-    const shouldBeAliveNext =
-      numNeighborsALiveNow > 1 && numNeighborsALiveNow < 4;
-    if (shouldBeAliveNext === this.aliveNext) {
+    if (this.shouldBeAliveNext() === this.aliveNext) {
       this.td.classList.add("correct");
     } else {
       this.td.classList.add("incorrect");
     }
     this.markedChecked = true;
+  }
+
+  advance1(): void {
+    markChecked(false);
+    this.toggleAliveNext(this.shouldBeAliveNext());
+  }
+
+  advance2(): void {
+    this.toggleAliveNow(this.aliveNext);
   }
 
   // update(): void {}
@@ -132,4 +143,9 @@ function markChecked(mark: boolean): void {
 
 document.querySelector("#check").addEventListener("click", () => {
   markChecked(true);
+});
+
+document.querySelector("#advance").addEventListener("click", () => {
+  allCells.map((cell) => cell.advance1());
+  allCells.map((cell) => cell.advance2());
 });
