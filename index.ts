@@ -202,9 +202,11 @@ document.querySelector("#advance").addEventListener("click", (e: Event) => {
   if (success || ALLOW_INCORRECT_ADVANCEMENT) {
     allCells.map((cell) => cell.advance1());
     allCells.map((cell) => cell.advance2());
-    timerGlobal?.stop(numInvalid);
-    startElem.disabled = false;
-    stopElem.disabled = true;
+    if (TIMED) {
+      timerGlobal?.stop(numInvalid);
+      startElem.disabled = false;
+      stopElem.disabled = true;
+    }
   }
   setTimeout(() => {
     clearChecked();
