@@ -120,3 +120,7 @@ button {
   grid-template-columns: 1fr 1fr;
   gap: calc(var(--cell-scale) / 8);
 }
+
+.legend {
+  font-size: 1.5em;
+}
