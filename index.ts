@@ -52,7 +52,6 @@ class Cell {
   }
 
   markChecked(mark: boolean): void {
-    console.log(this, mark);
     if (!mark) {
       this.td.classList.remove("correct");
       this.td.classList.remove("incorrect");
@@ -114,6 +113,5 @@ function markChecked(mark: boolean): void {
 }
 
 document.querySelector("#check").addEventListener("click", () => {
-  console.log;
   markChecked(true);
 });
