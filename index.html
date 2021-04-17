@@ -12,61 +12,63 @@
 <body>
   <div id="board"></div>
   <br>
-  <div id="demo">
-    <div class="column-grid">
-      <button id="check">Verify</button>
-      <button id="advance">Advance</button>
+  <div style="padding: 5vw">
+    <div id="demo">
+      <div class="column-grid">
+        <button id="check">Verify</button>
+        <button id="advance">Advance</button>
+      </div>
     </div>
-  </div>
-  <br><br><br>
-  <h2 class="legend-heading">Pattern</h2>
-  <div>
-    <div class="column-grid">
-      <button id="randomize">Randomize</button>
-      <button id="glider">Glider</button>
+    <br><br><br>
+    <h2 class="legend-heading">Pattern</h2>
+    <div>
+      <div class="column-grid">
+        <button id="randomize">Randomize</button>
+        <button id="glider">Glider</button>
+      </div>
     </div>
-  </div>
-  <br><br>
+    <br><br>
 
-  <h2 class="legend-heading">Legend</h2>
-  <div class="column-grid legend">
-    <div>
-      <table style="display: inline-block; vertical-align: middle;">
-        <tr>
-          <td class="dead-now">
-            <div class="dot"></div>
-          </td>
-        </tr>
-      </table> Dead
-    </div>
-    <div>
+    <h2 class="legend-heading">Legend</h2>
+    <div class="column-grid legend">
       <div>
         <table style="display: inline-block; vertical-align: middle;">
           <tr>
-            <td class="alive-now">
+            <td class="dead-now">
               <div class="dot"></div>
             </td>
           </tr>
-        </table> Alive
+        </table> Dead
       </div>
-    </div>
-    <div>
-      <table style="display: inline-block; vertical-align: middle;">
-        <tr>
-          <td class="dead-now alive-next">
-            <div class="dot"></div>
-          </td>
-        </tr>
-      </table> Birth
-    </div>
-    <div>
-      <table style="display: inline-block; vertical-align: middle;">
-        <tr>
-          <td class="alive-now dead-next">
-            <div class="dot"></div>
-          </td>
-        </tr>
-      </table> Death (shell)
+      <div>
+        <div>
+          <table style="display: inline-block; vertical-align: middle;">
+            <tr>
+              <td class="alive-now">
+                <div class="dot"></div>
+              </td>
+            </tr>
+          </table> Alive
+        </div>
+      </div>
+      <div>
+        <table style="display: inline-block; vertical-align: middle;">
+          <tr>
+            <td class="dead-now alive-next">
+              <div class="dot"></div>
+            </td>
+          </tr>
+        </table> Birth
+      </div>
+      <div>
+        <table style="display: inline-block; vertical-align: middle;">
+          <tr>
+            <td class="alive-now dead-next">
+              <div class="dot"></div>
+            </td>
+          </tr>
+        </table> Death (shell)
+      </div>
     </div>
   </div>
 </body>
