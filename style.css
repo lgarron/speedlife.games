@@ -14,7 +14,7 @@ html {
 }
 
 :root {
-  --cell-scale: calc(min(14vw, 14vh));
+  --cell-scale: calc(min(12vw, 12vh));
 }
 
 table {
@@ -110,11 +110,13 @@ td.alive-now.dead-next .dot {
 }
 
 button {
-  max-width: 90%;
   font-size: 1.5em;
-  padding: 0.25em;
+  padding: 0.5em 0.25em;
 }
 
-#demo {
-  padding: 0 5vw;
+.column-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--cell-scale) / 8);
 }

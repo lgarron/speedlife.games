@@ -1,7 +1,16 @@
 import { glider } from "./patterns";
 import { selectWithoutReplacement } from "./random";
 
-const ALLOW_INVALID_ADVANCEMENT = false;
+const ALLOW_INCORRECT_ADVANCEMENT =
+  getStringParam("allowIncorrectAdvancement", "false") === "true";
+
+function getStringParam(name: string, defaultValue: string): string {
+  const param = new URL(location.href).searchParams.get(name);
+  if (!param) {
+    return defaultValue;
+  }
+  return param ?? defaultValue;
+}
 
 function getNumParam(name: string, defaultValue: number): number {
   const param = new URL(location.href).searchParams.get(name);
@@ -174,7 +183,7 @@ document.querySelector("#glider").addEventListener("click", (e: Event) => {
 document.querySelector("#advance").addEventListener("click", (e: Event) => {
   e.preventDefault();
   const success = markChecked();
-  if (success || ALLOW_INVALID_ADVANCEMENT) {
+  if (success || ALLOW_INCORRECT_ADVANCEMENT) {
     allCells.map((cell) => cell.advance1());
     allCells.map((cell) => cell.advance2());
   }

@@ -13,42 +13,45 @@
   <div id="board"></div>
   <br>
   <div id="demo">
-    <button id="check">Check my placements</button>
-    <button id="advance">Advance</button>
-    <button id="randomize">Randomize</button>
-    <button id="glider">Glider</button>
-    <br><br>
-    <table style="display: inline-block; vertical-align: middle;">
-      <tr>
-        <td class="dead-now">
-          <div class="dot"></div>
-        </td>
-      </tr>
-    </table> Dead (staying dead)
-    <div style="display: block; height: 0.25em;"></div>
-    <table style="display: inline-block; vertical-align: middle;">
-      <tr>
-        <td class="dead-now alive-next">
-          <div class="dot"></div>
-        </td>
-      </tr>
-    </table> Almost alive
-    <div style="display: block; height: 0.25em;"></div>
-    <table style="display: inline-block; vertical-align: middle;">
-      <tr>
-        <td class="alive-now">
-          <div class="dot"></div>
-        </td>
-      </tr>
-    </table> Alive (staying alive)
-    <div style="display: block; height: 0.25em;"></div>
-    <table style="display: inline-block; vertical-align: middle;">
-      <tr>
-        <td class="alive-now dead-next">
-          <div class="dot"></div>
-        </td>
-      </tr>
-    </table> Almost dead (shell)
+    <div class="column-grid">
+      <button id="check">Check my placements</button>
+      <button id="advance">Advance</button>
+      <button id="randomize">Randomize</button>
+      <button id="glider">Glider</button>
+    </div>
+  </div>
+  <br><br>
+  <table style="display: inline-block; vertical-align: middle;">
+    <tr>
+      <td class="dead-now">
+        <div class="dot"></div>
+      </td>
+    </tr>
+  </table> Dead (staying dead)
+  <div style="display: block; height: 0.25em;"></div>
+  <table style="display: inline-block; vertical-align: middle;">
+    <tr>
+      <td class="dead-now alive-next">
+        <div class="dot"></div>
+      </td>
+    </tr>
+  </table> Almost alive
+  <div style="display: block; height: 0.25em;"></div>
+  <table style="display: inline-block; vertical-align: middle;">
+    <tr>
+      <td class="alive-now">
+        <div class="dot"></div>
+      </td>
+    </tr>
+  </table> Alive (staying alive)
+  <div style="display: block; height: 0.25em;"></div>
+  <table style="display: inline-block; vertical-align: middle;">
+    <tr>
+      <td class="alive-now dead-next">
+        <div class="dot"></div>
+      </td>
+    </tr>
+  </table> Almost dead (shell)
   </div>
 </body>
 
