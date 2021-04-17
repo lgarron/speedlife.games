@@ -208,9 +208,11 @@ document.querySelector("#advance").addEventListener("click", (e: Event) => {
       stopElem.disabled = true;
     }
   }
-  setTimeout(() => {
-    clearChecked();
-  }, 500);
+  if (!TIMED) {
+    setTimeout(() => {
+      clearChecked();
+    }, 500);
+  }
 });
 
 document.addEventListener("gesturestart", function (e) {
