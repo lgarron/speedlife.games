@@ -296,6 +296,7 @@ if (TIMED) {
   document.querySelector("#start").addEventListener("click", (e: Event) => {
     setRandom();
     timerGlobal.start();
+    clearChecked();
     startElem.disabled = true;
     stopElem.disabled = false;
   });
