@@ -17,12 +17,12 @@ html {
   --cell-scale: calc(min(12vw, 12vh));
 }
 
-table {
+table.game-of-life {
   background-color: black;
   touch-action: none;
 }
 
-td {
+table.game-of-life td {
   border: 1px solid #888;
   border: 1px solid #888;
   width: var(--cell-scale);
@@ -31,7 +31,7 @@ td {
   transition: background-color 0.2s;
 }
 
-.dot {
+table.game-of-life .dot {
   width: 90%;
   height: 90%;
   margin: 5%;
@@ -40,28 +40,28 @@ td {
   transition: background-color 0.2s;
 }
 
-td {
+table.game-of-life td {
   cursor: pointer;
   background: #fdb;
   border: none;
 }
 
-td:hover {
+table.game-of-life td:hover {
   background: #fb7 !important;
   transition: background-color 0s;
 }
 
-td.alive-now .dot {
+table.game-of-life td.alive-now .dot {
   background: black;
   box-shadow: inset 0px 0px 0px calc(var(--cell-scale) / 8) black;
 }
 
-td.alive-next:not(.alive-now) .dot {
+table.game-of-life td.alive-next:not(.alive-now) .dot {
   background: white;
   box-shadow: inset 0px 0px 0px 2px black;
 }
 
-td.alive-now.dead-next .dot {
+table.game-of-life td.alive-now.dead-next .dot {
   --bg: rgb(255, 255, 63);
   --diag: rgb(191, 191, 127);
   background-color: rgb(255, 255, 63);
@@ -75,11 +75,11 @@ td.alive-now.dead-next .dot {
   border: 1px solid;
 }
 
-.correct {
+table.game-of-life .correct {
   background: rgb(127, 255, 127) !important;
 }
 
-.incorrect {
+table.game-of-life .incorrect {
   --bg: rgb(255, 63, 63);
   --diag: rgba(255, 160, 160);
   background-color: red !important;
@@ -132,16 +132,40 @@ button {
 
 .timer-display {
   display: none;
-  font-size: 2em;
-  padding-bottom: 0.5em;
+  font-size: 1.5em;
+  padding: 0 5vw 0.5em;
   place-content: center;
-  font-family: monospace;
 }
 
 .timer-display.visible {
   display: grid;
 }
 
+code {
+  font-size: 1.2em;
+}
+
+#time {
+  display: grid;
+  place-content: center;
+  font-size: 5em;
+  padding-bottom: 0.2em;
+}
+
 #timed-description {
   font-size: 1.5em;
+}
+
+body:not(.timed) .for-timed {
+  display: hidden;
+}
+
+#stats {
+  font-size: 1.5em;
+  border: 1px solid black;
+  padding: 0.5em 0;
+}
+
+#stats .label {
+  text-align: right;
 }

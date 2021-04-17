@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <div class="timer-display hidden"><span><span id="time">0.00</span> (avg5: <span id="avg5">N/A</span>)</span></div>
+  <code id="time" class="for-timed">0.00</code>
   <div id="board"></div>
   <br>
   <div style="padding: 0 5vw">
@@ -21,7 +21,18 @@
         <button id="advance">Advance</button>
       </div>
     </div>
-    <div id="timed-description" hidden>
+    <div class="for-timed">
+      <br>
+      <div class="column-grid" id="stats">
+        <div class="label">Average of 5:</div>
+        <div><code id="avg5">N/A</code></div>
+        <div class="label">Average of 12:</div>
+        <div><code id="avg12">N/A</code></div>
+        <div class="label">Last 12 times:</div>
+        <div><code id="last12">N/A</code></div>
+      </div>
+    </div>
+    <div id="timed-description" class="for-timed">
       <br>
       Timed challenge:
       <ul>
@@ -45,7 +56,7 @@
     <h2 class="legend-heading">Legend</h2>
     <div class="column-grid legend">
       <div>
-        <table style="display: inline-block; vertical-align: middle;">
+        <table class="game-of-life" style="display: inline-block; vertical-align: middle;">
           <tr>
             <td class="dead-now">
               <div class="dot"></div>
@@ -55,7 +66,7 @@
       </div>
       <div>
         <div>
-          <table style="display: inline-block; vertical-align: middle;">
+          <table class="game-of-life" style="display: inline-block; vertical-align: middle;">
             <tr>
               <td class="alive-now">
                 <div class="dot"></div>
@@ -65,7 +76,7 @@
         </div>
       </div>
       <div>
-        <table style="display: inline-block; vertical-align: middle;">
+        <table class="game-of-life" style="display: inline-block; vertical-align: middle;">
           <tr>
             <td class="dead-now alive-next">
               <div class="dot"></div>
@@ -74,7 +85,7 @@
         </table> Birth
       </div>
       <div>
-        <table style="display: inline-block; vertical-align: middle;">
+        <table class="game-of-life" style="display: inline-block; vertical-align: middle;">
           <tr>
             <td class="alive-now dead-next">
               <div class="dot"></div>

@@ -7,7 +7,7 @@ export class Timer {
   session: Promise<Session>;
   constructor(
     private onTimeChange: (ms: number) => void,
-    statCallback: (statsSnapShot: StatSnapshot) => void
+    private statCallback: (statsSnapShot: StatSnapshot) => void
   ) {
     this.session = (async () => {
       const sessions = await this.timerDB.getSessions();
@@ -16,9 +16,13 @@ export class Timer {
         sessions[0] ??
         (await this.timerDB.createSession("Manual Game of Life", "mgol"));
       session.addStatListener(statCallback);
-      statCallback(await session.getStatSnapshot());
+      this.dispatchStatCallback();
       return session;
     })();
+  }
+
+  async dispatchStatCallback(): Promise<void> {
+    this.statCallback(await (await this.session).getStatSnapshot());
   }
 
   startTime: number | null = null;
@@ -42,9 +46,10 @@ export class Timer {
       Date.now() - this.startTime + numInvalid * INVALID_CELL_PENALTY_MS;
     console.log(time, numInvalid);
     this.onTimeChange(time);
-    (await this.session).add({
+    await (await this.session).add({
       resultTotalMs: time,
       unixDate: Date.now(),
     });
+    this.dispatchStatCallback();
   }
 }

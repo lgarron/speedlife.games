@@ -131,6 +131,7 @@ class Cell {
 }
 
 const table = document.createElement("table");
+table.classList.add("game-of-life");
 
 const cellGrid: Cell[][] = [];
 const allCells: Cell[] = [];
@@ -193,6 +194,8 @@ document.querySelector("#glider").addEventListener("click", (e: Event) => {
   setPattern(glider);
 });
 
+const startElem = document.querySelector("#start") as HTMLButtonElement;
+const stopElem = document.querySelector("#advance") as HTMLButtonElement;
 document.querySelector("#advance").addEventListener("click", (e: Event) => {
   e.preventDefault();
   const [success, numInvalid] = markChecked();
@@ -200,6 +203,8 @@ document.querySelector("#advance").addEventListener("click", (e: Event) => {
     allCells.map((cell) => cell.advance1());
     allCells.map((cell) => cell.advance2());
     timerGlobal?.stop(numInvalid);
+    startElem.disabled = false;
+    stopElem.disabled = true;
   }
   setTimeout(() => {
     clearChecked();
@@ -252,6 +257,8 @@ if (!TIMED) {
 if (TIMED) {
   const timeElem = document.querySelector("#time") as HTMLElement;
   const avg5Elem = document.querySelector("#avg5") as HTMLElement;
+  const avg12Elem = document.querySelector("#avg12") as HTMLElement;
+  const last12Elem = document.querySelector("#last12") as HTMLElement;
   timerGlobal = new Timer(
     (time) => {
       timeElem.textContent = formatTime(time, 2);
@@ -260,17 +267,23 @@ if (TIMED) {
       avg5Elem.textContent = statSnapshot.avg5
         ? formatTime(statSnapshot.avg5)
         : "N/A";
+      avg12Elem.textContent = statSnapshot.avg12
+        ? formatTime(statSnapshot.avg12)
+        : "N/A";
+      last12Elem.textContent = statSnapshot.latest100
+        .slice(0, 12)
+        .reverse()
+        .map((attempt) => formatTime(attempt.resultTotalMs))
+        .join(", ");
     }
   );
 
   if (TIMED) {
-    (document.querySelector(".timer-display") as HTMLElement).classList.add(
-      "visible"
-    );
+    document.body.classList.add("timed");
     (document.querySelector("#check") as HTMLButtonElement).hidden = true;
-    (document.querySelector("#start") as HTMLButtonElement).hidden = false;
-    (document.querySelector("#advance") as HTMLButtonElement).textContent =
-      "Stop";
+    startElem.hidden = false;
+    stopElem.textContent = "Stop";
+    stopElem.disabled = true;
     (document.querySelector(
       "#timed-description"
     ) as HTMLButtonElement).hidden = false;
@@ -279,5 +292,7 @@ if (TIMED) {
   document.querySelector("#start").addEventListener("click", (e: Event) => {
     setRandom();
     timerGlobal.start();
+    startElem.disabled = true;
+    stopElem.disabled = false;
   });
 }
