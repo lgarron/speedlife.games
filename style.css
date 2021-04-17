@@ -2,6 +2,8 @@ html,
 body {
   width: 100%;
   font-family: sans-serif;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 html {
@@ -17,6 +19,7 @@ html {
 
 table {
   background-color: black;
+  touch-action: none;
 }
 
 td {
@@ -70,4 +73,20 @@ td.alive-now.dead-next .dot {
 
 .incorrect {
   background: red !important;
+}
+
+#board {
+  width: 100%;
+  display: grid;
+  place-content: center;
+}
+
+button {
+  max-width: 90%;
+  font-size: 1.5em;
+  padding: 0.25em;
+}
+
+#demo {
+  padding: 0 5vw;
 }

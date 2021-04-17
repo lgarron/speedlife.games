@@ -12,7 +12,7 @@ const NUM_COLS = getNumParam("cols", 6);
 const NUM_ROWS = getNumParam("rows", 6);
 const deltas = [-1, 0, 1];
 
-const FACTOR = 1.2;
+const FACTOR = 1;
 const DEFAULT_INITIAL_ALIVE = Math.floor(
   Math.sqrt(NUM_COLS * NUM_ROWS) * FACTOR
 );
@@ -117,7 +117,7 @@ for (const cell of selectWithoutReplacement(allCells, NUM_INITIAL_ALIVE)) {
   cell.setInitialAlive();
 }
 
-document.querySelector("board").appendChild(table);
+document.querySelector("#board").appendChild(table);
 
 for (let i = 0; i < NUM_ROWS; i++) {
   for (let j = 0; j < NUM_COLS; j++) {
@@ -148,4 +148,8 @@ document.querySelector("#check").addEventListener("click", () => {
 document.querySelector("#advance").addEventListener("click", () => {
   allCells.map((cell) => cell.advance1());
   allCells.map((cell) => cell.advance2());
+});
+
+document.addEventListener("gesturestart", function (e) {
+  e.preventDefault();
 });
