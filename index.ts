@@ -1,6 +1,8 @@
 import { glider } from "./patterns";
 import { selectWithoutReplacement } from "./random";
 
+const ALLOW_INVALID_ADVANCEMENT = false;
+
 function getNumParam(name: string, defaultValue: number): number {
   const param = new URL(location.href).searchParams.get(name);
   if (!param) {
@@ -13,7 +15,7 @@ const NUM_COLS = getNumParam("cols", 6);
 const NUM_ROWS = getNumParam("rows", 6);
 const deltas = [-1, 0, 1];
 
-const FACTOR = 1;
+const FACTOR = 1.5;
 const DEFAULT_INITIAL_ALIVE = Math.floor(
   Math.sqrt(NUM_COLS * NUM_ROWS) * FACTOR
 );
@@ -33,9 +35,11 @@ class Cell {
     this.td.appendChild(this.dot);
   }
 
-  setInitialAlive() {
-    this.toggleAliveNow();
+  resetAlive(alive: boolean = true) {
+    this.toggleAliveNow(alive);
     this.aliveNext = this.aliveNow;
+    this.td.classList.toggle("alive-next", false);
+    this.td.classList.toggle("dead-next", false);
   }
 
   onclick(e: Event): void {
@@ -106,8 +110,8 @@ class Cell {
 
 const table = document.createElement("table");
 
-const cellGrid = [];
-const allCells = [];
+const cellGrid: Cell[][] = [];
+const allCells: Cell[] = [];
 for (let i = 0; i < NUM_ROWS; i++) {
   const tr = table.appendChild(document.createElement("tr"));
   const row = [];
@@ -157,10 +161,20 @@ document.querySelector("#check").addEventListener("click", (e: Event) => {
   markChecked();
 });
 
+document.querySelector("#randomize").addEventListener("click", (e: Event) => {
+  e.preventDefault();
+  setRandom();
+});
+
+document.querySelector("#glider").addEventListener("click", (e: Event) => {
+  e.preventDefault();
+  setPattern(glider);
+});
+
 document.querySelector("#advance").addEventListener("click", (e: Event) => {
   e.preventDefault();
   const success = markChecked();
-  if (success) {
+  if (success || ALLOW_INVALID_ADVANCEMENT) {
     allCells.map((cell) => cell.advance1());
     allCells.map((cell) => cell.advance2());
   }
@@ -173,24 +187,24 @@ document.addEventListener("gesturestart", function (e) {
   e.preventDefault();
 });
 
-function initializeRandom() {
+function setRandom() {
+  for (const cell of allCells) {
+    cell.resetAlive(false);
+  }
   for (const cell of selectWithoutReplacement(allCells, NUM_INITIAL_ALIVE)) {
-    cell.setInitialAlive();
+    cell.resetAlive(true);
   }
 }
 
-function initializePattern(pattern: string): void {
+function setPattern(pattern: string): void {
   const patternGrid = pattern.split("\n").slice(1);
   console.log(patternGrid);
   for (let i = 0; i < NUM_ROWS; i++) {
     for (let j = 0; j < NUM_COLS; j++) {
       console.log((cellGrid[i][j], patternGrid[i][j]));
-      if (patternGrid[i][j] === "•") {
-        cellGrid[i][j].setInitialAlive();
-      }
+      cellGrid[i][j].resetAlive(patternGrid[i][j] === "•");
     }
   }
 }
 
-// initializeRandom();
-initializePattern(glider);
+setRandom();

@@ -27,6 +27,8 @@ td {
   border: 1px solid #888;
   width: var(--cell-scale);
   height: var(--cell-scale);
+
+  transition: background-color 0.2s;
 }
 
 .dot {
@@ -34,6 +36,8 @@ td {
   height: 90%;
   margin: 5%;
   border-radius: 100%;
+
+  transition: background-color 0.2s;
 }
 
 td {
@@ -43,16 +47,18 @@ td {
 }
 
 td:hover {
-  background: #fb7;
+  background: #fb7 !important;
+  transition: background-color 0s;
 }
 
 td.alive-now .dot {
   background: black;
+  box-shadow: inset 0px 0px 0px calc(var(--cell-scale) / 8) black;
 }
 
 td.alive-next:not(.alive-now) .dot {
   background: white;
-  border: 1px solid;
+  box-shadow: inset 0px 0px 0px 2px black;
 }
 
 td.alive-now.dead-next .dot {
@@ -76,7 +82,7 @@ td.alive-now.dead-next .dot {
 .incorrect {
   --bg: rgb(255, 63, 63);
   --diag: rgba(255, 160, 160);
-  /* background: red !important; */
+  background-color: red !important;
   background: linear-gradient(
       45deg,
       transparent 0%,
