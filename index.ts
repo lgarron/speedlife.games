@@ -1,6 +1,19 @@
-const NUM_COLS = 8;
-const NUM_ROWS = 8;
+import { selectWithoutReplacement } from "./random";
+
+function getNumParam(name: string, defaultValue: number): number {
+  const param = new URL(location.href).searchParams.get(name);
+  if (!param) {
+    return defaultValue;
+  }
+  return parseInt(param) ?? defaultValue;
+}
+
+const NUM_COLS = getNumParam("cols", 8);
+const NUM_ROWS = getNumParam("rows", 8);
 const deltas = [-1, 0, 1];
+
+const DEFAULT_INITIAL_ALIVE = Math.floor(Math.sqrt(NUM_COLS * NUM_ROWS) * 1.2);
+const NUM_INITIAL_ALIVE = getNumParam("alive", DEFAULT_INITIAL_ALIVE);
 
 class Cell {
   aliveNow: boolean = false;
@@ -12,13 +25,13 @@ class Cell {
     this.td.addEventListener("click", this.onclick.bind(this));
     (this.td as any).cell = this; // for debugging
 
-    if (Math.random() < 0.1) {
-      this.toggleAliveNow();
-    }
-    this.aliveNext = this.aliveNow;
-
     this.dot.classList.add("dot");
     this.td.appendChild(this.dot);
+  }
+
+  setInitialAlive() {
+    this.toggleAliveNow();
+    this.aliveNext = this.aliveNow;
   }
 
   onclick(e: Event): void {
@@ -87,6 +100,10 @@ for (let i = 0; i < NUM_ROWS; i++) {
     allCells.push(cell);
   }
   cellGrid.push(row);
+}
+
+for (const cell of selectWithoutReplacement(allCells, NUM_INITIAL_ALIVE)) {
+  cell.setInitialAlive();
 }
 
 document.querySelector("board").appendChild(table);
