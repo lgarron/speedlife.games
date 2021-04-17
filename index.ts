@@ -75,15 +75,18 @@ class Cell {
 
 const table = document.createElement("table");
 
-const cells = [];
+const cellGrid = [];
+const allCells = [];
 for (let i = 0; i < NUM_ROWS; i++) {
   const tr = table.appendChild(document.createElement("tr"));
   const row = [];
   for (let j = 0; j < NUM_COLS; j++) {
     const td = tr.appendChild(document.createElement("td"));
-    row.push(new Cell(td));
+    const cell = new Cell(td);
+    row.push(cell);
+    allCells.push(cell);
   }
-  cells.push(row);
+  cellGrid.push(row);
 }
 
 document.querySelector("board").appendChild(table);
@@ -95,9 +98,9 @@ for (let i = 0; i < NUM_ROWS; i++) {
         if (di === 0 && dj === 0) {
           continue;
         }
-        const t = cells[i + di];
+        const t = cellGrid[i + di];
         if (t) {
-          t[j + dj]?.neighbors.push(cells[i][j]);
+          t[j + dj]?.neighbors.push(cellGrid[i][j]);
         }
       }
     }
@@ -105,10 +108,8 @@ for (let i = 0; i < NUM_ROWS; i++) {
 }
 
 function markChecked(mark: boolean): void {
-  for (let i = 0; i < NUM_ROWS; i++) {
-    for (let j = 0; j < NUM_COLS; j++) {
-      cells[i][j].markChecked(mark);
-    }
+  for (const cell of allCells) {
+    cell.markChecked(mark);
   }
 }
 
