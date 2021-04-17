@@ -110,8 +110,8 @@ table.game-of-life .incorrect {
 }
 
 button {
-  font-size: 1.5em;
-  padding: 1em 0.25em;
+  font-size: 1.5rem;
+  padding: 1rem 0.25rem;
 }
 
 .column-grid {
@@ -163,7 +163,7 @@ body:not(.timed) .for-timed {
 #stats {
   font-size: 1.5em;
   border: 1px solid black;
-  padding: 0.5em 0;
+  padding: 1em 0;
 }
 
 #stats .label {
