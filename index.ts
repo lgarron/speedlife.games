@@ -191,6 +191,7 @@ document.querySelector("#advance").addEventListener("click", (e: Event) => {
   if (success || ALLOW_INCORRECT_ADVANCEMENT) {
     allCells.map((cell) => cell.advance1());
     allCells.map((cell) => cell.advance2());
+    timer.stop();
   }
   setTimeout(() => {
     clearChecked();
@@ -212,10 +213,8 @@ function setRandom() {
 
 function setPattern(pattern: string): void {
   const patternGrid = pattern.split("\n").slice(1);
-  console.log(patternGrid);
   for (let i = 0; i < NUM_ROWS; i++) {
     for (let j = 0; j < NUM_COLS; j++) {
-      console.log((cellGrid[i][j], patternGrid[i][j]));
       cellGrid[i][j].resetAlive(patternGrid[i][j] === "•");
     }
   }
@@ -229,3 +228,13 @@ if (ENABLE_SWIPING) {
 }
 
 setRandom();
+
+const timeElem = document.querySelector("#time") as HTMLElement;
+const timer = new Timer((attempt) => {
+  timeElem.textContent = formatTime(attempt, 2);
+});
+timer.start();
+
+import "./timing";
+import { Timer } from "./timing";
+import { formatTime } from "./vendor/timer-db/format";
