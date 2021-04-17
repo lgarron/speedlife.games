@@ -21,7 +21,8 @@ class Cell {
     this.td.appendChild(this.dot);
   }
 
-  onclick(): void {
+  onclick(e: Event): void {
+    e.preventDefault();
     if (this.markChecked) {
       markChecked(false);
     }
