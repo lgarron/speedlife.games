@@ -1,3 +1,4 @@
+import { glider } from "./patterns";
 import { selectWithoutReplacement } from "./random";
 
 function getNumParam(name: string, defaultValue: number): number {
@@ -40,7 +41,7 @@ class Cell {
   onclick(e: Event): void {
     e.preventDefault();
     if (this.markChecked) {
-      markChecked(false);
+      clearChecked();
     }
     this.toggleAliveNext();
   }
@@ -66,27 +67,33 @@ class Cell {
 
   shouldBeAliveNext(): boolean {
     const numNeighborsAliveNow = this.countNeighborsAliveNow();
-    return numNeighborsAliveNow > 1 && numNeighborsAliveNow < 4;
+    if (this.aliveNow) {
+      return numNeighborsAliveNow > 1 && numNeighborsAliveNow < 4;
+    } else {
+      return numNeighborsAliveNow === 3;
+    }
   }
 
-  markChecked(mark: boolean): void {
+  clearChecked(): void {
     this.td.classList.remove("correct");
     this.td.classList.remove("incorrect");
-    if (!mark) {
-      this.markedChecked = false;
-      return;
-    }
+    this.markedChecked = false;
+    return;
+  }
 
+  markChecked(): boolean {
+    this.clearChecked();
+    this.markedChecked = true;
     if (this.shouldBeAliveNext() === this.aliveNext) {
       this.td.classList.add("correct");
+      return true;
     } else {
       this.td.classList.add("incorrect");
+      return false;
     }
-    this.markedChecked = true;
   }
 
   advance1(): void {
-    markChecked(false);
     this.toggleAliveNext(this.shouldBeAliveNext());
   }
 
@@ -113,10 +120,6 @@ for (let i = 0; i < NUM_ROWS; i++) {
   cellGrid.push(row);
 }
 
-for (const cell of selectWithoutReplacement(allCells, NUM_INITIAL_ALIVE)) {
-  cell.setInitialAlive();
-}
-
 document.querySelector("#board").appendChild(table);
 
 for (let i = 0; i < NUM_ROWS; i++) {
@@ -135,23 +138,59 @@ for (let i = 0; i < NUM_ROWS; i++) {
   }
 }
 
-function markChecked(mark: boolean): void {
+function clearChecked(): void {
+  allCells.map((cell) => cell.clearChecked());
+}
+
+function markChecked(): boolean {
+  let success = true;
   for (const cell of allCells) {
-    cell.markChecked(mark);
+    if (!cell.markChecked()) {
+      success = false;
+    }
   }
+  return success;
 }
 
 document.querySelector("#check").addEventListener("click", (e: Event) => {
   e.preventDefault();
-  markChecked(true);
+  markChecked();
 });
 
 document.querySelector("#advance").addEventListener("click", (e: Event) => {
   e.preventDefault();
-  allCells.map((cell) => cell.advance1());
-  allCells.map((cell) => cell.advance2());
+  const success = markChecked();
+  if (success) {
+    allCells.map((cell) => cell.advance1());
+    allCells.map((cell) => cell.advance2());
+  }
+  setTimeout(() => {
+    clearChecked();
+  }, 500);
 });
 
 document.addEventListener("gesturestart", function (e) {
   e.preventDefault();
 });
+
+function initializeRandom() {
+  for (const cell of selectWithoutReplacement(allCells, NUM_INITIAL_ALIVE)) {
+    cell.setInitialAlive();
+  }
+}
+
+function initializePattern(pattern: string): void {
+  const patternGrid = pattern.split("\n").slice(1);
+  console.log(patternGrid);
+  for (let i = 0; i < NUM_ROWS; i++) {
+    for (let j = 0; j < NUM_COLS; j++) {
+      console.log((cellGrid[i][j], patternGrid[i][j]));
+      if (patternGrid[i][j] === "•") {
+        cellGrid[i][j].setInitialAlive();
+      }
+    }
+  }
+}
+
+// initializeRandom();
+initializePattern(glider);
