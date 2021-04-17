@@ -1,18 +1,18 @@
 html,
 body {
   width: 100%;
-  min-height: 100%;
   font-family: sans-serif;
 }
 
 html {
+  min-height: 100%;
   display: grid;
   place-content: center;
   padding: 5vh 0em;
 }
 
 :root {
-  --cell-scale: calc(min(10vw, 10vh));
+  --cell-scale: calc(min(14vw, 14vh));
 }
 
 table {

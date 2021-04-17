@@ -8,11 +8,11 @@ function getNumParam(name: string, defaultValue: number): number {
   return parseInt(param) ?? defaultValue;
 }
 
-const NUM_COLS = getNumParam("cols", 8);
-const NUM_ROWS = getNumParam("rows", 8);
+const NUM_COLS = getNumParam("cols", 6);
+const NUM_ROWS = getNumParam("rows", 6);
 const deltas = [-1, 0, 1];
 
-const DEFAULT_INITIAL_ALIVE = Math.floor(Math.sqrt(NUM_COLS * NUM_ROWS) * 1.2);
+const DEFAULT_INITIAL_ALIVE = Math.floor(Math.sqrt(NUM_COLS * NUM_ROWS) * 1.5);
 const NUM_INITIAL_ALIVE = getNumParam("alive", DEFAULT_INITIAL_ALIVE);
 
 class Cell {
