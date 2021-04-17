@@ -56,23 +56,45 @@ td.alive-next:not(.alive-now) .dot {
 }
 
 td.alive-now.dead-next .dot {
-  background-color: red;
+  --bg: rgb(255, 255, 63);
+  --diag: rgb(191, 191, 127);
+  background-color: rgb(255, 255, 63);
   background: repeating-linear-gradient(
     -45deg,
-    red,
-    red calc(var(--cell-scale) / 12),
-    rgba(255, 159, 159, 1) calc(var(--cell-scale) / 12),
-    rgba(255, 159, 159, 1) calc(var(--cell-scale) / 6)
+    var(--bg),
+    var(--bg) calc(var(--cell-scale) / 12),
+    var(--diag) calc(var(--cell-scale) / 12),
+    var(--diag) calc(var(--cell-scale) / 6)
   );
   border: 1px solid;
 }
 
 .correct {
-  background: lime !important;
+  background: rgb(127, 255, 127) !important;
 }
 
 .incorrect {
-  background: red !important;
+  --bg: rgb(255, 63, 63);
+  --diag: rgba(255, 160, 160);
+  /* background: red !important; */
+  background: linear-gradient(
+      45deg,
+      transparent 0%,
+      transparent 45%,
+      var(--diag) 45%,
+      var(--diag) 55%,
+      transparent 55%,
+      transparent 100%
+    ),
+    linear-gradient(
+      -45deg,
+      var(--bg) 0%,
+      var(--bg) 45%,
+      var(--diag) 45%,
+      var(--diag) 55%,
+      var(--bg) 55%,
+      var(--bg) 100%
+    );
 }
 
 #board {
