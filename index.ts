@@ -1,11 +1,17 @@
+import { StatSnapshot } from "timer-db";
 import { glider } from "./patterns";
 import { selectWithoutReplacement } from "./random";
+import "./timing";
+import { Timer } from "./timing";
 import { SwipeTracker } from "./vendor/SwipeTracker";
+import { formatTime } from "./vendor/timer-db/format";
 
 const ENABLE_SWIPING = getStringParam("swipe", "false") === "true";
 
+const TIMED = getStringParam("timed", "false") === "true";
+
 const ALLOW_INCORRECT_ADVANCEMENT =
-  getStringParam("allowIncorrectAdvancement", "false") === "true";
+  TIMED || getStringParam("allowIncorrectAdvancement", "false") === "true";
 
 function getStringParam(name: string, defaultValue: string): string {
   const param = new URL(location.href).searchParams.get(name);
@@ -32,6 +38,8 @@ const DEFAULT_INITIAL_ALIVE = Math.floor(
   Math.sqrt(NUM_COLS * NUM_ROWS) * FACTOR
 );
 const NUM_INITIAL_ALIVE = getNumParam("alive", DEFAULT_INITIAL_ALIVE);
+
+let timerGlobal: Timer | null = null;
 
 class Cell {
   aliveNow: boolean = false;
@@ -160,14 +168,14 @@ function clearChecked(): void {
   allCells.map((cell) => cell.clearChecked());
 }
 
-function markChecked(): boolean {
-  let success = true;
+function markChecked(): [allValid: boolean, invalid: number] {
+  let invalid = 0;
   for (const cell of allCells) {
     if (!cell.markChecked()) {
-      success = false;
+      invalid++;
     }
   }
-  return success;
+  return [invalid === 0, invalid];
 }
 
 document.querySelector("#check").addEventListener("click", (e: Event) => {
@@ -187,11 +195,11 @@ document.querySelector("#glider").addEventListener("click", (e: Event) => {
 
 document.querySelector("#advance").addEventListener("click", (e: Event) => {
   e.preventDefault();
-  const success = markChecked();
+  const [success, numInvalid] = markChecked();
   if (success || ALLOW_INCORRECT_ADVANCEMENT) {
     allCells.map((cell) => cell.advance1());
     allCells.map((cell) => cell.advance2());
-    timer.stop();
+    timerGlobal?.stop(numInvalid);
   }
   setTimeout(() => {
     clearChecked();
@@ -220,6 +228,8 @@ function setPattern(pattern: string): void {
   }
 }
 
+// Swiping
+
 if (ENABLE_SWIPING) {
   const tracker = new SwipeTracker(
     allCells.map((cell) => cell.td),
@@ -227,14 +237,47 @@ if (ENABLE_SWIPING) {
   );
 }
 
-setRandom();
+// Timing
 
-const timeElem = document.querySelector("#time") as HTMLElement;
-const timer = new Timer((attempt) => {
-  timeElem.textContent = formatTime(attempt, 2);
+document.querySelector("#timed").addEventListener("click", (e: Event) => {
+  const url = new URL(location.href);
+  url.searchParams.set("timed", (!TIMED).toString());
+  location.href = url.toString();
 });
-timer.start();
 
-import "./timing";
-import { Timer } from "./timing";
-import { formatTime } from "./vendor/timer-db/format";
+if (!TIMED) {
+  setRandom();
+}
+
+if (TIMED) {
+  const timeElem = document.querySelector("#time") as HTMLElement;
+  const avg5Elem = document.querySelector("#avg5") as HTMLElement;
+  timerGlobal = new Timer(
+    (time) => {
+      timeElem.textContent = formatTime(time, 2);
+    },
+    (statSnapshot: StatSnapshot) => {
+      avg5Elem.textContent = statSnapshot.avg5
+        ? formatTime(statSnapshot.avg5)
+        : "N/A";
+    }
+  );
+
+  if (TIMED) {
+    (document.querySelector(".timer-display") as HTMLElement).classList.add(
+      "visible"
+    );
+    (document.querySelector("#check") as HTMLButtonElement).hidden = true;
+    (document.querySelector("#start") as HTMLButtonElement).hidden = false;
+    (document.querySelector("#advance") as HTMLButtonElement).textContent =
+      "Stop";
+    (document.querySelector(
+      "#timed-description"
+    ) as HTMLButtonElement).hidden = false;
+  }
+
+  document.querySelector("#start").addEventListener("click", (e: Event) => {
+    setRandom();
+    timerGlobal.start();
+  });
+}
