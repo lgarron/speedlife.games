@@ -1,5 +1,8 @@
 import { glider } from "./patterns";
 import { selectWithoutReplacement } from "./random";
+import { SwipeTracker } from "./vendor/SwipeTracker";
+
+const ENABLE_SWIPING = getStringParam("swipe", "false") === "true";
 
 const ALLOW_INCORRECT_ADVANCEMENT =
   getStringParam("allowIncorrectAdvancement", "false") === "true";
@@ -37,7 +40,9 @@ class Cell {
   neighbors: Cell[] = [];
   markedChecked = false;
   constructor(public td: HTMLTableCellElement) {
-    this.td.addEventListener("click", this.onclick.bind(this));
+    if (!ENABLE_SWIPING || matchMedia("(pointer:fine)").matches) {
+      this.td.addEventListener("mousedown", this.onclick.bind(this));
+    }
     (this.td as any).cell = this; // for debugging
 
     this.dot.classList.add("dot");
@@ -214,6 +219,13 @@ function setPattern(pattern: string): void {
       cellGrid[i][j].resetAlive(patternGrid[i][j] === "•");
     }
   }
+}
+
+if (ENABLE_SWIPING) {
+  const tracker = new SwipeTracker(
+    allCells.map((cell) => cell.td),
+    (sector) => ((sector as any).cell as Cell).toggleAliveNext()
+  );
 }
 
 setRandom();
