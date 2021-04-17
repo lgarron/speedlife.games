@@ -141,11 +141,13 @@ function markChecked(mark: boolean): void {
   }
 }
 
-document.querySelector("#check").addEventListener("click", () => {
+document.querySelector("#check").addEventListener("click", (e: Event) => {
+  e.preventDefault();
   markChecked(true);
 });
 
-document.querySelector("#advance").addEventListener("click", () => {
+document.querySelector("#advance").addEventListener("click", (e: Event) => {
+  e.preventDefault();
   allCells.map((cell) => cell.advance1());
   allCells.map((cell) => cell.advance2());
 });

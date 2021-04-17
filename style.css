@@ -60,9 +60,9 @@ td.alive-now.dead-next .dot {
   background: repeating-linear-gradient(
     -45deg,
     red,
-    red 0.1em,
-    rgba(255, 127, 127, 1) 0.1em,
-    rgba(255, 127, 127, 1) 0.2em
+    red calc(var(--cell-scale) / 12),
+    rgba(255, 159, 159, 1) calc(var(--cell-scale) / 12),
+    rgba(255, 159, 159, 1) calc(var(--cell-scale) / 6)
   );
   border: 1px solid;
 }
