@@ -163,7 +163,7 @@ body:not(.timed) .for-timed {
 #stats {
   font-size: 1.5em;
   border: 1px solid black;
-  padding: 1em 0;
+  padding: 1em 0.5em;
 }
 
 #stats .label {
