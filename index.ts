@@ -66,6 +66,23 @@ class Cell {
     this.td.appendChild(this.dot);
   }
 
+  setNumber(zero: boolean = false) {
+    this.clearNumber();
+    const count = this.countNeighborsAliveNow();
+    if (count === 0 && !zero) {
+      return;
+    }
+    this.dot.textContent = count.toString();
+    this.dot.classList.add(`number-${count}`);
+  }
+
+  clearNumber() {
+    this.dot.textContent = "";
+    for (let i = 0; i < 10; i++) {
+      this.dot.classList.remove(`number-${i}`);
+    }
+  }
+
   resetAlive(alive: boolean = true) {
     this.toggleAliveNow(alive);
     this.aliveNext = this.aliveNow;
@@ -124,6 +141,7 @@ class Cell {
     this.td.classList.remove("correct");
     this.td.classList.remove("incorrect");
     this.markedChecked = false;
+    this.clearNumber();
     return;
   }
 
@@ -335,3 +353,32 @@ if (TIMED) {
     stopElem.disabled = false;
   });
 }
+
+function setNumbers(options: {
+  dead: boolean;
+  alive: boolean;
+  zero: boolean;
+}): void {
+  for (const cell of allCells) {
+    if (!cell.aliveNow && options.dead) {
+      cell.setNumber(options.zero);
+    }
+    if (cell.aliveNow && options.alive) {
+      cell.setNumber(options.zero);
+    }
+  }
+}
+
+function clearNumbers(options: { dead: boolean; alive: boolean }): void {
+  for (const cell of allCells) {
+    if (!cell.aliveNow && options.dead) {
+      cell.clearNumber();
+    }
+    if (cell.aliveNow && options.alive) {
+      cell.clearNumber();
+    }
+  }
+}
+
+(window as any).setNumbers = setNumbers;
+(window as any).clearNumbers = clearNumbers;

@@ -51,12 +51,49 @@ table.game-of-life td {
 }
 
 table.game-of-life .dot {
+  display: grid;
+  place-content: center;
+  font-size: calc(var(--cell-scale) * 0.6);
+  padding-top: 0.1em;
+  font-family: "Gotham Black";
+  font-weight: "bold";
+  /* text-shadow: 0 0 0.2em white; */
+
   width: 90%;
   height: 90%;
   margin: 5%;
   border-radius: 100%;
 
   transition: background-color 0.2s;
+}
+
+table.game-of-life .alive-now .dot {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.75);
+}
+
+.number-1 {
+  color: #0022e5;
+}
+.number-2 {
+  color: #387f22;
+}
+.number-3 {
+  color: #e83223;
+}
+.number-4 {
+  color: #000c76;
+}
+.number-5 {
+  color: #74150f;
+}
+.number-6 {
+  color: #37807f;
+}
+.number-7 {
+  color: #000000;
+}
+.number-8 {
+  color: #808080;
 }
 
 table.game-of-life td {
