@@ -7,9 +7,10 @@ import { SwipeTracker } from "./vendor/SwipeTracker";
 import { formatTime } from "./vendor/timer-db/format";
 
 const ENABLE_SWIPING = getStringParam("swipe", "false") === "true";
+const DEMO = getStringParam("demo", "false") === "true";
 
 const TIMED = getStringParam("timed", "false") === "true";
-const RIGHT_CLICK = getStringParam("right-click", "false") === "true";
+const RIGHT_CLICK = getStringParam("right-click", "false") === "true" || DEMO;
 
 const ALLOW_INCORRECT_ADVANCEMENT =
   TIMED || getStringParam("allow-incorrect-advancement", "false") === "true";
