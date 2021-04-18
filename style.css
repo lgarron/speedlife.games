@@ -175,3 +175,23 @@ body:not(.timed) .for-timed {
 #stats .label {
   text-align: right;
 }
+
+button {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  border-radius: 0.25em;
+}
+
+button:not(:active) {
+  transition: background-color 0.5s;
+}
+
+button:active {
+  background-color: #4285f4;
+  color: white;
+}
+
+body.timed #state-controls button {
+  -webkit-appearance: none;
+  min-height: 4em;
+}
