@@ -22,4 +22,4 @@
 - Shift-`A`: Clear all numbers for alive cells
 - `a`: Toggle all numbers for alive cells
 - Shift-`A`: Clear all numbers for dead cells
-- `n`: Clear all neighbor marks
+- `n` or `x`: Clear all neighbor marks

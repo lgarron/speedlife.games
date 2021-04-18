@@ -479,6 +479,7 @@ class KeyboardListener {
         }
         break;
       case "n":
+      case "x":
         clearNeighborMarks();
         break;
     }
