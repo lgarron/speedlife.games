@@ -245,6 +245,8 @@ function clearChecked(options: { clearNumbers: boolean }): void {
   allCells.map((cell) => cell.clearChecked());
   clearNeighborMarks();
   if (options.clearNumbers) {
+    keyboardListener.aliveNumbers = false;
+    keyboardListener.deadNumbers = false;
     allCells.map((cell) => cell.clearNumber());
   }
 }
