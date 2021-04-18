@@ -20,12 +20,21 @@ html {
   --cell-scale: calc(min(min(12vw, 12vh), 100px));
 }
 
-#title {
+#title,
+#subtitle {
   font-size: 2em;
   display: grid;
   place-content: center;
-  text-decoration: underline;
   margin-bottom: 0.5em;
+}
+
+#title {
+  text-decoration: underline;
+}
+
+a#subtitle {
+  color: blue;
+  text-decoration: none;
 }
 
 table.game-of-life {
