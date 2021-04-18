@@ -15,6 +15,14 @@ export const patterns = {
       
       
 `,
+  box: `
+      
+ •• • 
+ •    
+    • 
+ • •• 
+      
+`,
   "r-pentomino": `
       
       
