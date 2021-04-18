@@ -353,7 +353,7 @@ document.querySelector("#timed").addEventListener("click", (e: Event) => {
   location.href = url.toString();
 });
 
-if (!TIMED) {
+if (!TIMED && !DEMO) {
   setRandom();
 }
 
