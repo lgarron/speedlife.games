@@ -30,7 +30,6 @@ html {
 
 table.game-of-life {
   background-color: black;
-  touch-action: none;
 }
 
 table.game-of-life td {
@@ -120,10 +119,11 @@ table.game-of-life .incorrect {
   place-content: center;
 }
 
-#board,
+#board .game-of-life,
 body.timed #state-controls {
   user-select: none;
   -webkit-user-select: none;
+  touch-action: none;
 }
 
 button {

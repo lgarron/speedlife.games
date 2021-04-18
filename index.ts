@@ -54,6 +54,7 @@ class Cell {
     if (!ENABLE_SWIPING || matchMedia("(pointer:fine)").matches) {
       this.td.addEventListener("mousedown", this.onclick.bind(this));
     }
+    this.td.addEventListener("touchstart", this.onclick.bind(this));
     this.td.addEventListener(
       "contextmenu",
       this.oncontextmenu.bind(this),
