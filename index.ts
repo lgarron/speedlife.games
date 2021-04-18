@@ -127,7 +127,7 @@ class Cell {
       this.highlightNeighbors();
     } else {
       if (this.markChecked) {
-        clearAnnotations({ clearNumbers: false });
+        clearAnnotations({ clearNumbers: false, clearNeighborMarks: false });
       }
       this.toggleAliveNext();
     }
@@ -136,7 +136,7 @@ class Cell {
   oncontextmenu(e: MouseEvent): boolean {
     e.preventDefault();
     if (this.markChecked) {
-      clearAnnotations({ clearNumbers: true });
+      clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
     }
     if (RIGHT_CLICK) {
       this.toggleAliveNow();
@@ -241,9 +241,14 @@ function clearNeighborMarks(): void {
   allCells.map((cell) => cell.setNeighborMark(false));
 }
 
-function clearAnnotations(options: { clearNumbers: boolean }): void {
+function clearAnnotations(options: {
+  clearNumbers: boolean;
+  clearNeighborMarks: boolean;
+}): void {
   allCells.map((cell) => cell.clearChecked());
-  clearNeighborMarks();
+  if (options.clearNeighborMarks) {
+    clearNeighborMarks();
+  }
   if (options.clearNumbers) {
     keyboardListener.aliveNumbers = false;
     keyboardListener.deadNumbers = false;
@@ -296,7 +301,7 @@ stopElem.addEventListener("click", (e: Event) => {
   }
   if (!TIMED) {
     setTimeout(() => {
-      clearAnnotations({ clearNumbers: true });
+      clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
     }, 500);
   }
 });
@@ -321,7 +326,7 @@ function setRandom() {
 }
 
 function setPattern(pattern: string): void {
-  clearAnnotations({ clearNumbers: true });
+  clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
   const patternGrid = pattern.split("\n").slice(1);
   for (let i = 0; i < NUM_ROWS; i++) {
     for (let j = 0; j < NUM_COLS; j++) {
@@ -393,7 +398,7 @@ if (TIMED) {
   startElem.addEventListener("click", (e: Event) => {
     setRandom();
     timerGlobal.start();
-    clearAnnotations({ clearNumbers: true });
+    clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
     startElem.disabled = true;
     stopElem.disabled = false;
   });
