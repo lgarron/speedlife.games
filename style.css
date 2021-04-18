@@ -16,11 +16,19 @@ html {
   min-height: 100%;
   display: grid;
   place-content: center;
-  padding: 5vh 0em;
+  padding: 2vh 0em;
 }
 
 :root {
   --cell-scale: calc(min(min(12vw, 12vh), 100px));
+}
+
+#title {
+  font-size: 2.5em;
+  display: grid;
+  place-content: center;
+  text-decoration: underline;
+  margin-bottom: 0.5em;
 }
 
 table.game-of-life {
