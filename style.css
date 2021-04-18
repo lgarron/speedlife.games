@@ -118,7 +118,10 @@ table.game-of-life .incorrect {
   width: 100%;
   display: grid;
   place-content: center;
+}
 
+#board,
+body.timed #state-controls {
   user-select: none;
   -webkit-user-select: none;
 }
