@@ -271,3 +271,12 @@ button:active {
   place-content: center;
   margin-bottom: 1em;
 }
+
+.neighbor-mark {
+  background: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 1);
+}
+
+table.game-of-life td.neighbor-mark:hover {
+  background: rgba(255, 230, 191, 0.85) !important;
+}

@@ -94,6 +94,17 @@ class Cell {
     }
   }
 
+  highlightNeighbors(): void {
+    clearNeighborMarks();
+    for (const neighbor of this.neighbors) {
+      neighbor.setNeighborMark(true);
+    }
+  }
+
+  setNeighborMark(on: boolean): void {
+    this.td.classList.toggle("neighbor-mark", on);
+  }
+
   resetAlive(alive: boolean = true) {
     this.toggleAliveNow(alive);
     this.aliveNext = this.aliveNow;
@@ -103,8 +114,10 @@ class Cell {
 
   onclick(e: MouseEvent): void {
     e.preventDefault();
-    if (keyboardListener.shifted) {
+    if (keyboardListener.shiftIsPressed) {
       this.toggleNumber(true);
+    } else if (keyboardListener.optionIsPressed) {
+      this.highlightNeighbors();
     } else {
       if (this.markChecked) {
         clearChecked({ clearNumbers: false });
@@ -217,8 +230,13 @@ for (let i = 0; i < NUM_ROWS; i++) {
   }
 }
 
+function clearNeighborMarks(): void {
+  allCells.map((cell) => cell.setNeighborMark(false));
+}
+
 function clearChecked(options: { clearNumbers: boolean }): void {
   allCells.map((cell) => cell.clearChecked());
+  clearNeighborMarks();
   if (options.clearNumbers) {
     allCells.map((cell) => cell.clearNumber());
   }
@@ -418,7 +436,8 @@ function toggleNumbers(options: {
 (window as any).toggleNumbers = toggleNumbers;
 
 class KeyboardListener {
-  shifted: boolean = false;
+  shiftIsPressed: boolean = false;
+  optionIsPressed: boolean = false;
   aliveNumbers: boolean = false;
   deadNumbers: boolean = false;
   constructor() {
@@ -426,10 +445,13 @@ class KeyboardListener {
     window.addEventListener("keyup", this.keyup.bind(this));
   }
   keydown(e: KeyboardEvent): void {
-    // console.log("keydown", e.key);
+    console.log("keydown", e.key);
     switch (e.key) {
       case "Shift":
-        this.shifted = true;
+        this.shiftIsPressed = true;
+        break;
+      case "Alt":
+        this.optionIsPressed = true;
         break;
       case "A":
         clearNumbers({ alive: true });
@@ -451,13 +473,19 @@ class KeyboardListener {
           setNumbers({ dead: true });
         }
         break;
+      case "n":
+        clearNeighborMarks();
+        break;
     }
   }
   keyup(e: KeyboardEvent): void {
-    // console.log("keyup", e.key);
+    console.log("keyup", e.key);
     switch (e.key) {
       case "Shift":
-        this.shifted = false;
+        this.shiftIsPressed = false;
+        break;
+      case "Alt":
+        this.optionIsPressed = false;
         break;
     }
   }
