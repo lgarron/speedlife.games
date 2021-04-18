@@ -1,11 +1,11 @@
 export const patterns = {
   glider: `
- •    
-  •   
+      
+      
+      
 •••   
-      
-      
-      
+  •   
+ •    
 `,
   blinker: `
       
