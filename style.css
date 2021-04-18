@@ -16,7 +16,7 @@ html {
   min-height: 100%;
   display: grid;
   place-content: center;
-  padding: 2vh 0em;
+  padding: 2vh 0em 5vh;
 }
 
 :root {
