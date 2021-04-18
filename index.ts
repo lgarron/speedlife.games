@@ -50,6 +50,7 @@ class Cell {
   dot = document.createElement("div");
   neighbors: Cell[] = [];
   markedChecked = false;
+  showingNumber: boolean = false;
   constructor(public td: HTMLTableCellElement) {
     if (!ENABLE_SWIPING || matchMedia("(pointer:fine)").matches) {
       this.td.addEventListener("mousedown", this.onclick.bind(this));
@@ -74,12 +75,22 @@ class Cell {
     }
     this.dot.textContent = count.toString();
     this.dot.classList.add(`number-${count}`);
+    this.showingNumber = true;
   }
 
   clearNumber() {
     this.dot.textContent = "";
     for (let i = 0; i < 10; i++) {
       this.dot.classList.remove(`number-${i}`);
+    }
+    this.showingNumber = false;
+  }
+
+  toggleNumber(zero: boolean) {
+    if (this.showingNumber) {
+      this.clearNumber();
+    } else {
+      this.setNumber(zero);
     }
   }
 
@@ -355,9 +366,9 @@ if (TIMED) {
 }
 
 function setNumbers(options: {
-  dead: boolean;
-  alive: boolean;
-  zero: boolean;
+  dead?: boolean;
+  alive?: boolean;
+  zero?: boolean;
 }): void {
   for (const cell of allCells) {
     if (!cell.aliveNow && options.dead) {
@@ -369,7 +380,7 @@ function setNumbers(options: {
   }
 }
 
-function clearNumbers(options: { dead: boolean; alive: boolean }): void {
+function clearNumbers(options: { dead?: boolean; alive?: boolean }): void {
   for (const cell of allCells) {
     if (!cell.aliveNow && options.dead) {
       cell.clearNumber();
@@ -380,5 +391,21 @@ function clearNumbers(options: { dead: boolean; alive: boolean }): void {
   }
 }
 
+function toggleNumbers(options: {
+  dead?: boolean;
+  alive?: boolean;
+  zero?: boolean;
+}): void {
+  for (const cell of allCells) {
+    if (!cell.aliveNow && options.dead) {
+      cell.toggleNumber(options.zero);
+    }
+    if (cell.aliveNow && options.alive) {
+      cell.toggleNumber(options.zero);
+    }
+  }
+}
+
 (window as any).setNumbers = setNumbers;
 (window as any).clearNumbers = clearNumbers;
+(window as any).toggleNumbers = toggleNumbers;
