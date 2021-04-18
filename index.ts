@@ -9,9 +9,10 @@ import { formatTime } from "./vendor/timer-db/format";
 const ENABLE_SWIPING = getStringParam("swipe", "false") === "true";
 
 const TIMED = getStringParam("timed", "false") === "true";
+const RIGHT_CLICK = getStringParam("right-click", "false") === "true";
 
 const ALLOW_INCORRECT_ADVANCEMENT =
-  TIMED || getStringParam("allowIncorrectAdvancement", "false") === "true";
+  TIMED || getStringParam("allow-incorrect-advancement", "false") === "true";
 
 function getStringParam(name: string, defaultValue: string): string {
   const param = new URL(location.href).searchParams.get(name);
@@ -51,6 +52,11 @@ class Cell {
     if (!ENABLE_SWIPING || matchMedia("(pointer:fine)").matches) {
       this.td.addEventListener("mousedown", this.onclick.bind(this));
     }
+    this.td.addEventListener(
+      "contextmenu",
+      this.oncontextmenu.bind(this),
+      false
+    );
     (this.td as any).cell = this; // for debugging
 
     this.dot.classList.add("dot");
@@ -64,12 +70,23 @@ class Cell {
     this.td.classList.toggle("dead-next", false);
   }
 
-  onclick(e: Event): void {
+  onclick(e: MouseEvent): void {
     e.preventDefault();
     if (this.markChecked) {
       clearChecked();
     }
     this.toggleAliveNext();
+  }
+
+  oncontextmenu(e: MouseEvent): boolean {
+    e.preventDefault();
+    if (this.markChecked) {
+      clearChecked();
+    }
+    if (RIGHT_CLICK) {
+      this.toggleAliveNow();
+    }
+    return false;
   }
 
   toggleAliveNow(value: boolean = undefined): void {
