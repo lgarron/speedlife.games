@@ -293,6 +293,7 @@ if (TIMED) {
     (document.querySelector(
       "#timed-description"
     ) as HTMLButtonElement).hidden = false;
+    document.querySelector("#timed").textContent = "⏱ Exit timed mode";
   }
 
   document.querySelector("#start").addEventListener("click", (e: Event) => {
