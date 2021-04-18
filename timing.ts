@@ -6,15 +6,23 @@ export class Timer {
   timerDB = new TimerDB();
   session: Promise<Session>;
   constructor(
+    eventID: string,
+    eventName: string,
     private onTimeChange: (ms: number) => void,
     private statCallback: (statsSnapShot: StatSnapshot) => void
   ) {
     this.session = (async () => {
+      this.timerDB.getSessions;
       const sessions = await this.timerDB.getSessions();
-      console.log(sessions[0]);
-      const session: Session =
-        sessions[0] ??
-        (await this.timerDB.createSession("Manual Game of Life", "mgol"));
+      let session: Session;
+      for (const maybeSession of sessions) {
+        if (maybeSession.eventID === eventID) {
+          session = maybeSession;
+        }
+      }
+      if (!session) {
+        session = await this.timerDB.createSession(eventName, eventID);
+      }
       session.addStatListener(statCallback);
       this.dispatchStatCallback();
       return session;
