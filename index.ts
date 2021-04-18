@@ -1,5 +1,5 @@
 import { StatSnapshot } from "timer-db";
-import { glider } from "./patterns";
+import { patterns } from "./patterns";
 import { selectWithoutReplacement } from "./random";
 import "./timing";
 import { Timer } from "./timing";
@@ -189,10 +189,12 @@ document.querySelector("#randomize").addEventListener("click", (e: Event) => {
   setRandom();
 });
 
-document.querySelector("#glider").addEventListener("click", (e: Event) => {
-  e.preventDefault();
-  setPattern(glider);
-});
+for (const patternButton of document.querySelectorAll(".pattern")) {
+  patternButton.addEventListener("click", (e: Event) => {
+    e.preventDefault();
+    setPattern(patterns[patternButton.getAttribute("data-pattern")]);
+  });
+}
 
 const startElem = document.querySelector("#start") as HTMLButtonElement;
 const stopElem = document.querySelector("#advance") as HTMLButtonElement;

@@ -1,8 +1,26 @@
-export const glider = `
+export const patterns = {
+  glider: `
  •    
   •   
 •••   
       
       
       
-`;
+`,
+  blinker: `
+      
+  •   
+  •   
+  •   
+      
+      
+`,
+  "r-pentomino": `
+      
+      
+   •• 
+  ••  
+   •  
+      
+`,
+};
