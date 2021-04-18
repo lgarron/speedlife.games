@@ -4,6 +4,7 @@
 
 - [ ] "Do not disturb"
 - [ ] System Preferences > Accessibility > Display > Cursor Size
+- [ ] Zoom input settings: mic and video
 
 ## URLs
 
