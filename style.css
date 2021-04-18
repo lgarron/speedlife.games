@@ -135,6 +135,10 @@ button {
   gap: calc(var(--cell-scale) / 8);
 }
 
+.auto-cols {
+  grid-template-columns: auto auto;
+}
+
 .legend-heading {
   border-bottom: 1px solid black;
   padding: 0.25em 0.25em;
