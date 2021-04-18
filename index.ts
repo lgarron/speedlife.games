@@ -86,7 +86,7 @@ class Cell {
     this.showingNumber = false;
   }
 
-  toggleNumber(zero: boolean) {
+  toggleNumber(zero?: boolean) {
     if (this.showingNumber) {
       this.clearNumber();
     } else {
@@ -103,10 +103,14 @@ class Cell {
 
   onclick(e: MouseEvent): void {
     e.preventDefault();
-    if (this.markChecked) {
-      clearChecked();
+    if (keyboardListener.shifted) {
+      this.toggleNumber();
+    } else {
+      if (this.markChecked) {
+        clearChecked();
+      }
+      this.toggleAliveNext();
     }
-    this.toggleAliveNext();
   }
 
   oncontextmenu(e: MouseEvent): boolean {
@@ -288,6 +292,7 @@ function setRandom() {
 }
 
 function setPattern(pattern: string): void {
+  clearChecked();
   const patternGrid = pattern.split("\n").slice(1);
   for (let i = 0; i < NUM_ROWS; i++) {
     for (let j = 0; j < NUM_COLS; j++) {
@@ -409,3 +414,45 @@ function toggleNumbers(options: {
 (window as any).setNumbers = setNumbers;
 (window as any).clearNumbers = clearNumbers;
 (window as any).toggleNumbers = toggleNumbers;
+
+class KeyboardListener {
+  shifted: boolean = false;
+  aliveNumbers: boolean = false;
+  deadNumbers: boolean = false;
+  constructor() {
+    window.addEventListener("keydown", this.keydown.bind(this));
+    window.addEventListener("keyup", this.keyup.bind(this));
+  }
+  keydown(e: KeyboardEvent): void {
+    // console.log("keydown", e.key);
+    switch (e.key) {
+      case "Shift":
+        this.shifted = true;
+        break;
+      case "a":
+        if ((this.aliveNumbers = !this.aliveNumbers)) {
+          clearNumbers({ alive: true });
+        } else {
+          setNumbers({ alive: true, zero: true });
+        }
+        break;
+      case "d":
+        if ((this.deadNumbers = !this.deadNumbers)) {
+          clearNumbers({ dead: true });
+        } else {
+          setNumbers({ dead: true });
+        }
+        break;
+    }
+  }
+  keyup(e: KeyboardEvent): void {
+    // console.log("keyup", e.key);
+    switch (e.key) {
+      case "Shift":
+        this.shifted = false;
+        break;
+    }
+  }
+}
+
+const keyboardListener = new KeyboardListener();
