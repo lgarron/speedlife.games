@@ -456,22 +456,26 @@ class KeyboardListener {
         break;
       case "A":
         clearNumbers({ alive: true });
+        this.aliveNumbers = false;
         break;
       case "a":
         if ((this.aliveNumbers = !this.aliveNumbers)) {
-          clearNumbers({ alive: true });
-        } else {
           setNumbers({ alive: true, zero: true });
+        } else {
+          clearNumbers({ alive: true });
+          this.aliveNumbers = false;
         }
         break;
       case "D":
         clearNumbers({ dead: true });
+        this.deadNumbers = false;
         break;
       case "d":
         if ((this.deadNumbers = !this.deadNumbers)) {
-          clearNumbers({ dead: true });
-        } else {
           setNumbers({ dead: true });
+        } else {
+          clearNumbers({ dead: true });
+          this.deadNumbers = false;
         }
         break;
       case "n":
