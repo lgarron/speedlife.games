@@ -17,7 +17,7 @@ html {
 }
 
 :root {
-  --cell-scale: calc(min(min(12vw, 12vh), 100px));
+  --cell-scale: calc(min(min(12vw, 12vh), 80px));
 }
 
 #title,
@@ -279,4 +279,9 @@ button:active {
 
 table.game-of-life td.neighbor-mark:hover {
   background: rgba(255, 230, 191, 0.85) !important;
+}
+
+body.demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }

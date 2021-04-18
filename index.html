@@ -14,12 +14,12 @@
 </head>
 
 <body>
-  <div id="title">Manual 🖐 Game of Life</div>
-  <a id="subtitle" href="https://garron.net/app/life"><code>garron.net/app/life</code></a>
-  <span id="time-wrapper" class="for-timed"><span>⏱&nbsp;<code id="time">0.00</code></span></span>
-  <div id="board"></div>
-  <br>
   <div style="padding: 0 5vw">
+    <div id="title">Manual 🖐 Game of Life</div>
+    <a id="subtitle" href="https://garron.net/app/life"><code>garron.net/app/life</code></a>
+    <span id="time-wrapper" class="for-timed"><span>⏱&nbsp;<code id="time">0.00</code></span></span>
+    <div id="board"></div>
+    <br>
     <div class="generation-wrapper for-untimed"><span>Generation #<span id="generation">1</span></span></div>
     <div id="state-controls">
       <div class="column-grid">
@@ -50,16 +50,18 @@
       </ul>
     </div>
     <br>
-    <h2 class="legend-heading">Patterns</h2>
-    <div>
-      <div class="column-grid">
-        <button class="pattern" data-pattern="blinker">🚦 Blinker</button>
-        <button class="pattern" data-pattern="glider">↗️ Glider</button>
-        <button class="pattern" data-pattern="box">📦 Partial Box</button>
-        <button class="pattern" data-pattern="r-pentomino">R-pentomino</button>
+    <div id="patterns-wrapper">
+      <h2 class="legend-heading">Patterns</h2>
+      <div>
+        <div class="column-grid">
+          <button class="pattern" data-pattern="blinker">🚦 Blinker</button>
+          <button class="pattern" data-pattern="glider">↗️ Glider</button>
+          <button class="pattern" data-pattern="box">📦 Partial Box</button>
+          <button class="pattern" data-pattern="r-pentomino">R-pentomino</button>
+        </div>
       </div>
+      <br>
     </div>
-    <br>
     <h2 class="legend-heading">Challenge</h2>
     <div>
       <div class="column-grid">
@@ -68,7 +70,8 @@
       </div>
     </div>
     <br>
-
+  </div>
+  <div style="padding: 0 5vw">
     <h2 class="legend-heading">Explanation</h2>
     <div class="explanation">
       In <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a>, cells change as

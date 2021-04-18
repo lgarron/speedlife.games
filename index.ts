@@ -8,6 +8,7 @@ import { formatTime } from "./vendor/timer-db/format";
 
 const ENABLE_SWIPING = getStringParam("swipe", "false") === "true";
 const DEMO = getStringParam("demo", "false") === "true";
+document.body.classList.toggle("demo", DEMO);
 
 const TIMED = getStringParam("timed", "false") === "true";
 const RIGHT_CLICK = getStringParam("right-click", "false") === "true" || DEMO;
