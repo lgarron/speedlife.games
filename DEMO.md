@@ -3,6 +3,7 @@
 ## Checklist
 
 - [ ] "Do not disturb"
+- [ ] System Preferences > Accessibility > Display > Cursor Size
 
 ## URLs
 
