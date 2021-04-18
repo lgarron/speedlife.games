@@ -495,6 +495,9 @@ class KeyboardListener {
       case "x":
         clearNeighborMarks();
         break;
+      case "m":
+        document.querySelector("#minesweeper").classList.toggle("show");
+        break;
     }
   }
   keyup(e: KeyboardEvent): void {

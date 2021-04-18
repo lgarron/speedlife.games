@@ -285,3 +285,21 @@ body.demo {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+
+#minesweeper {
+  display: none;
+  /* position: absolute; */
+  width: calc(min(80%, 80vh));
+  height: calc(min(80%, 80vh));
+  margin: auto;
+  background: url("./minesweeper.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  margin-top: 5vh;
+  margin-bottom: 20vh;
+}
+
+body.demo #minesweeper.show {
+  display: inherit;
+}
