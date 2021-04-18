@@ -9,6 +9,11 @@ import { formatTime } from "./vendor/timer-db/format";
 const ENABLE_SWIPING = getStringParam("swipe", "false") === "true";
 const DEMO = getStringParam("demo", "false") === "true";
 document.body.classList.toggle("demo", DEMO);
+if (DEMO) {
+  document
+    .querySelector("#second-panel")
+    .appendChild(document.querySelector("#patterns-wrapper"));
+}
 
 const TIMED = getStringParam("timed", "false") === "true";
 const RIGHT_CLICK = getStringParam("right-click", "false") === "true" || DEMO;
