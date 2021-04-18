@@ -14,6 +14,8 @@ const RIGHT_CLICK = getStringParam("right-click", "false") === "true";
 const ALLOW_INCORRECT_ADVANCEMENT =
   TIMED || getStringParam("allow-incorrect-advancement", "false") === "true";
 
+let generation = 1;
+
 function getStringParam(name: string, defaultValue: string): string {
   const param = new URL(location.href).searchParams.get(name);
   if (!param) {
@@ -225,6 +227,8 @@ document.querySelector("#advance").addEventListener("click", (e: Event) => {
       timerGlobal?.stop(numInvalid);
       startElem.disabled = false;
       stopElem.disabled = true;
+    } else {
+      setGeneration(++generation);
     }
   }
   if (!TIMED) {
@@ -233,6 +237,11 @@ document.querySelector("#advance").addEventListener("click", (e: Event) => {
     }, 500);
   }
 });
+
+function setGeneration(gen: number): void {
+  generation = gen;
+  document.querySelector("#generation").textContent = gen.toString();
+}
 
 document.addEventListener("gesturestart", function (e) {
   e.preventDefault();
@@ -245,6 +254,7 @@ function setRandom() {
   for (const cell of selectWithoutReplacement(allCells, NUM_INITIAL_ALIVE)) {
     cell.resetAlive(true);
   }
+  setGeneration(1);
 }
 
 function setPattern(pattern: string): void {
@@ -254,6 +264,7 @@ function setPattern(pattern: string): void {
       cellGrid[i][j].resetAlive(patternGrid[i][j] === "•");
     }
   }
+  setGeneration(1);
 }
 
 // Swiping
