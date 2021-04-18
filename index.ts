@@ -217,7 +217,7 @@ for (const patternButton of document.querySelectorAll(".pattern")) {
 
 const startElem = document.querySelector("#start") as HTMLButtonElement;
 const stopElem = document.querySelector("#advance") as HTMLButtonElement;
-document.querySelector("#advance").addEventListener("click", (e: Event) => {
+stopElem.addEventListener("click", (e: Event) => {
   e.preventDefault();
   const [success, numInvalid] = markChecked();
   if (success || ALLOW_INCORRECT_ADVANCEMENT) {
@@ -326,7 +326,7 @@ if (TIMED) {
     document.querySelector("#timed").textContent = "⏱ Exit timed mode";
   }
 
-  document.querySelector("#start").addEventListener("click", (e: Event) => {
+  startElem.addEventListener("click", (e: Event) => {
     setRandom();
     timerGlobal.start();
     clearChecked();
