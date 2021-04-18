@@ -199,7 +199,7 @@ button:active {
   color: white;
 }
 
-body.timed #state-controls button {
+#state-controls button {
   -webkit-appearance: none;
   min-height: 4em;
 }
