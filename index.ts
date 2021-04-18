@@ -264,7 +264,7 @@ if (TIMED) {
   const avg12Elem = document.querySelector("#avg12") as HTMLElement;
   const last12Elem = document.querySelector("#last12") as HTMLElement;
   timerGlobal = new Timer(
-    `mgol-${NUM_COLS}c-${NUM_ROWS}r-${NUM_INITIAL_ALIVE}a`,
+    `life-${NUM_COLS}c-${NUM_ROWS}r-${NUM_INITIAL_ALIVE}a`,
     `ManualGame of Life (${NUM_COLS} columns, ${NUM_ROWS} rows, ${NUM_INITIAL_ALIVE} initially alive)`,
     (time) => {
       timeElem.textContent = formatTime(time, 2);
