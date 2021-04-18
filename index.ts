@@ -156,7 +156,6 @@ class Cell {
     this.td.classList.remove("correct");
     this.td.classList.remove("incorrect");
     this.markedChecked = false;
-    this.clearNumber();
     return;
   }
 
@@ -220,6 +219,7 @@ for (let i = 0; i < NUM_ROWS; i++) {
 
 function clearChecked(): void {
   allCells.map((cell) => cell.clearChecked());
+  allCells.map((cell) => cell.clearNumber());
 }
 
 function markChecked(): [allValid: boolean, invalid: number] {
@@ -429,12 +429,18 @@ class KeyboardListener {
       case "Shift":
         this.shifted = true;
         break;
+      case "A":
+        clearNumbers({ alive: true });
+        break;
       case "a":
         if ((this.aliveNumbers = !this.aliveNumbers)) {
           clearNumbers({ alive: true });
         } else {
           setNumbers({ alive: true, zero: true });
         }
+        break;
+      case "D":
+        clearNumbers({ dead: true });
         break;
       case "d":
         if ((this.deadNumbers = !this.deadNumbers)) {
