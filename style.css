@@ -7,9 +7,6 @@ body {
   width: 100%;
   font-family: sans-serif;
   margin: 0;
-
-  user-select: none;
-  -webkit-user-select: none;
 }
 
 html {
@@ -121,6 +118,9 @@ table.game-of-life .incorrect {
   width: 100%;
   display: grid;
   place-content: center;
+
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 button {
