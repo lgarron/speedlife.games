@@ -104,7 +104,7 @@ class Cell {
   onclick(e: MouseEvent): void {
     e.preventDefault();
     if (keyboardListener.shifted) {
-      this.toggleNumber();
+      this.toggleNumber(true);
     } else {
       if (this.markChecked) {
         clearChecked({ clearNumbers: false });
