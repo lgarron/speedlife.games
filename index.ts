@@ -127,7 +127,7 @@ class Cell {
       this.highlightNeighbors();
     } else {
       if (this.markChecked) {
-        clearChecked({ clearNumbers: false });
+        clearAnnotations({ clearNumbers: false });
       }
       this.toggleAliveNext();
     }
@@ -136,7 +136,7 @@ class Cell {
   oncontextmenu(e: MouseEvent): boolean {
     e.preventDefault();
     if (this.markChecked) {
-      clearChecked({ clearNumbers: true });
+      clearAnnotations({ clearNumbers: true });
     }
     if (RIGHT_CLICK) {
       this.toggleAliveNow();
@@ -241,7 +241,7 @@ function clearNeighborMarks(): void {
   allCells.map((cell) => cell.setNeighborMark(false));
 }
 
-function clearChecked(options: { clearNumbers: boolean }): void {
+function clearAnnotations(options: { clearNumbers: boolean }): void {
   allCells.map((cell) => cell.clearChecked());
   clearNeighborMarks();
   if (options.clearNumbers) {
@@ -296,7 +296,7 @@ stopElem.addEventListener("click", (e: Event) => {
   }
   if (!TIMED) {
     setTimeout(() => {
-      clearChecked({ clearNumbers: true });
+      clearAnnotations({ clearNumbers: true });
     }, 500);
   }
 });
@@ -321,7 +321,7 @@ function setRandom() {
 }
 
 function setPattern(pattern: string): void {
-  clearChecked({ clearNumbers: true });
+  clearAnnotations({ clearNumbers: true });
   const patternGrid = pattern.split("\n").slice(1);
   for (let i = 0; i < NUM_ROWS; i++) {
     for (let j = 0; j < NUM_COLS; j++) {
@@ -393,7 +393,7 @@ if (TIMED) {
   startElem.addEventListener("click", (e: Event) => {
     setRandom();
     timerGlobal.start();
-    clearChecked({ clearNumbers: true });
+    clearAnnotations({ clearNumbers: true });
     startElem.disabled = true;
     stopElem.disabled = false;
   });
