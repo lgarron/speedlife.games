@@ -13,6 +13,7 @@ if (DEMO) {
   document
     .querySelector("#second-panel")
     .appendChild(document.querySelector("#patterns-wrapper"));
+  (document.querySelector("#challenge-wrapper")! as HTMLElement).hidden = true;
 }
 
 const TIMED = getStringParam("timed", "false") === "true";
