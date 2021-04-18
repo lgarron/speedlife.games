@@ -20,7 +20,7 @@ html {
 }
 
 :root {
-  --cell-scale: calc(min(12vw, 12vh));
+  --cell-scale: calc(min(min(12vw, 12vh), 100px));
 }
 
 table.game-of-life {
