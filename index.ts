@@ -221,13 +221,13 @@ stopElem.addEventListener("click", (e: Event) => {
   e.preventDefault();
   const [success, numInvalid] = markChecked();
   if (success || ALLOW_INCORRECT_ADVANCEMENT) {
-    allCells.map((cell) => cell.advance1());
-    allCells.map((cell) => cell.advance2());
     if (TIMED) {
       timerGlobal?.stop(numInvalid);
       startElem.disabled = false;
       stopElem.disabled = true;
     } else {
+      allCells.map((cell) => cell.advance1());
+      allCells.map((cell) => cell.advance2());
       setGeneration(++generation);
     }
   }
