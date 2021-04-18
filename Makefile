@@ -4,7 +4,7 @@ build:
 
 .PHONY: dev
 dev:
-	npx parcel index.html
+	npx parcel index.html --open
 
 SFTP_PATH = "towns.dreamhost.com:~/garron.net/app/manual-game-of-life"
 URL       = "https://garron.net/app/manual-game-of-life/"
