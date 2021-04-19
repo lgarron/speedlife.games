@@ -50,11 +50,14 @@ table.game-of-life td {
   transition: background-color 0.2s;
 }
 
+body.demo table.game-of-life .dot {
+  padding-top: 0.1em;
+  font-size: calc(var(--cell-scale) * 0.6);
+}
+
 table.game-of-life .dot {
   display: grid;
   place-content: center;
-  font-size: calc(var(--cell-scale) * 0.6);
-  padding-top: 0.1em;
   font-family: "Gotham Black";
   font-weight: "bold";
   /* text-shadow: 0 0 0.2em white; */
