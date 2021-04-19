@@ -362,7 +362,7 @@ if (TIMED) {
   const timeElem = document.querySelector("#time") as HTMLElement;
   const avg5Elem = document.querySelector("#avg5") as HTMLElement;
   const avg12Elem = document.querySelector("#avg12") as HTMLElement;
-  const last12Elem = document.querySelector("#last12") as HTMLElement;
+  // const last12Elem = document.querySelector("#last12") as HTMLElement;
   timerGlobal = new Timer(
     `life-${NUM_COLS}c-${NUM_ROWS}r-${NUM_INITIAL_ALIVE}a`,
     `Manual Game of Life (${NUM_COLS} columns, ${NUM_ROWS} rows, ${NUM_INITIAL_ALIVE} initially alive)`,
@@ -376,11 +376,11 @@ if (TIMED) {
       avg12Elem.textContent = statSnapshot.avg12
         ? formatTime(statSnapshot.avg12)
         : "N/A";
-      last12Elem.textContent = statSnapshot.latest100
-        .slice(0, 12)
-        .reverse()
-        .map((attempt) => formatTime(attempt.resultTotalMs))
-        .join(", ");
+      // last12Elem.textContent = statSnapshot.latest100
+      //   .slice(0, 12)
+      //   .reverse()
+      //   .map((attempt) => formatTime(attempt.resultTotalMs))
+      //   .join(", ");
     }
   );
 
