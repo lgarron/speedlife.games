@@ -34,7 +34,7 @@ class KeyboardListener {
     window.addEventListener("keyup", this.keyup.bind(this));
   }
   keydown(e: KeyboardEvent): void {
-    console.log("keydown", e.key);
+    // console.log("keydown", e.key);
     switch (e.key) {
       case "Shift":
         this.shiftIsPressed = true;
