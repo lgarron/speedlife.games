@@ -24,6 +24,72 @@ const ALLOW_INCORRECT_ADVANCEMENT =
 
 let generation = 1;
 
+class KeyboardListener {
+  shiftIsPressed: boolean = false;
+  optionIsPressed: boolean = false;
+  aliveNumbers: boolean = false;
+  deadNumbers: boolean = false;
+  constructor() {
+    window.addEventListener("keydown", this.keydown.bind(this));
+    window.addEventListener("keyup", this.keyup.bind(this));
+  }
+  keydown(e: KeyboardEvent): void {
+    console.log("keydown", e.key);
+    switch (e.key) {
+      case "Shift":
+        this.shiftIsPressed = true;
+        break;
+      case "Alt":
+        this.optionIsPressed = true;
+        break;
+      case "A":
+        clearNumbers({ alive: true });
+        this.aliveNumbers = false;
+        break;
+      case "a":
+        if ((this.aliveNumbers = !this.aliveNumbers)) {
+          setNumbers({ alive: true, zero: true });
+        } else {
+          clearNumbers({ alive: true });
+          this.aliveNumbers = false;
+        }
+        break;
+      case "D":
+        clearNumbers({ dead: true });
+        this.deadNumbers = false;
+        break;
+      case "d":
+        if ((this.deadNumbers = !this.deadNumbers)) {
+          setNumbers({ dead: true });
+        } else {
+          clearNumbers({ dead: true });
+          this.deadNumbers = false;
+        }
+        break;
+      case "n":
+      case "x":
+        clearNeighborMarks();
+        break;
+      case "m":
+        document.querySelector("#minesweeper").classList.toggle("show");
+        break;
+    }
+  }
+  keyup(e: KeyboardEvent): void {
+    // console.log("keyup", e.key);
+    switch (e.key) {
+      case "Shift":
+        this.shiftIsPressed = false;
+        break;
+      case "Alt":
+        this.optionIsPressed = false;
+        break;
+    }
+  }
+}
+
+const keyboardListener = new KeyboardListener();
+
 function getStringParam(name: string, defaultValue: string): string {
   const param = new URL(location.href).searchParams.get(name);
   if (!param) {
@@ -317,6 +383,7 @@ document.addEventListener("gesturestart", function (e) {
 });
 
 function setRandom() {
+  clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
   for (const cell of allCells) {
     cell.resetAlive(false);
   }
@@ -449,69 +516,3 @@ function toggleNumbers(options: {
 (window as any).setNumbers = setNumbers;
 (window as any).clearNumbers = clearNumbers;
 (window as any).toggleNumbers = toggleNumbers;
-
-class KeyboardListener {
-  shiftIsPressed: boolean = false;
-  optionIsPressed: boolean = false;
-  aliveNumbers: boolean = false;
-  deadNumbers: boolean = false;
-  constructor() {
-    window.addEventListener("keydown", this.keydown.bind(this));
-    window.addEventListener("keyup", this.keyup.bind(this));
-  }
-  keydown(e: KeyboardEvent): void {
-    console.log("keydown", e.key);
-    switch (e.key) {
-      case "Shift":
-        this.shiftIsPressed = true;
-        break;
-      case "Alt":
-        this.optionIsPressed = true;
-        break;
-      case "A":
-        clearNumbers({ alive: true });
-        this.aliveNumbers = false;
-        break;
-      case "a":
-        if ((this.aliveNumbers = !this.aliveNumbers)) {
-          setNumbers({ alive: true, zero: true });
-        } else {
-          clearNumbers({ alive: true });
-          this.aliveNumbers = false;
-        }
-        break;
-      case "D":
-        clearNumbers({ dead: true });
-        this.deadNumbers = false;
-        break;
-      case "d":
-        if ((this.deadNumbers = !this.deadNumbers)) {
-          setNumbers({ dead: true });
-        } else {
-          clearNumbers({ dead: true });
-          this.deadNumbers = false;
-        }
-        break;
-      case "n":
-      case "x":
-        clearNeighborMarks();
-        break;
-      case "m":
-        document.querySelector("#minesweeper").classList.toggle("show");
-        break;
-    }
-  }
-  keyup(e: KeyboardEvent): void {
-    console.log("keyup", e.key);
-    switch (e.key) {
-      case "Shift":
-        this.shiftIsPressed = false;
-        break;
-      case "Alt":
-        this.optionIsPressed = false;
-        break;
-    }
-  }
-}
-
-const keyboardListener = new KeyboardListener();
