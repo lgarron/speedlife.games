@@ -6,8 +6,8 @@ build:
 dev:
 	npx parcel index.html --open
 
-SFTP_PATH = "towns.dreamhost.com:~/garron.net/app/manual-game-of-life"
-URL       = "https://garron.net/app/manual-game-of-life/"
+SFTP_PATH = "towns.dreamhost.com:~/speedlife.games"
+URL       = "https://speedlife.games/"
 
 .PHONY: deploy
 deploy: build
