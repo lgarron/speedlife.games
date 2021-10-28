@@ -20,9 +20,14 @@ html {
   --cell-scale: calc(min(min(12vw, 12vh), 80px));
 }
 
-#title,
-#subtitle {
+#title {
   font-size: 2em;
+  display: grid;
+  place-content: center;
+}
+
+#subtitle {
+  font-size: 1.4em;
   display: grid;
   place-content: center;
   margin-bottom: 0.5em;
