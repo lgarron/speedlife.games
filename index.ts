@@ -1,21 +1,24 @@
 import { StatSnapshot } from "timer-db";
 import { patterns } from "./patterns";
-import { selectWithoutReplacement } from "./random";
+import { selectWithoutReplacement, selectWithoutReplacementSeeded } from "./random";
 import "./timing";
 import { Timer } from "./timing";
 import { SwipeTracker } from "./vendor/SwipeTracker";
 import { formatTime } from "./vendor/timer-db/format";
+import { updateSeed } from "./vendor/random-uint-below/randomUIntBelow";
 
 const ENABLE_SWIPING = getStringParam("swipe", "false") === "true";
 const DEMO = getStringParam("demo", "false") === "true";
 document.body.classList.toggle("demo", DEMO);
 if (DEMO) {
   document
-    .querySelector("#second-panel")
-    .appendChild(document.querySelector("#patterns-wrapper"));
+    .querySelector("#second-panel")!
+    .appendChild(document.querySelector("#patterns-wrapper")!);
   (document.querySelector("#challenge-wrapper")! as HTMLElement).hidden = true;
 }
 
+const G4G = getStringParam("G4G", "false") === "true";
+console.log(getStringParam("G4G", "false") );
 const TIMED = getStringParam("timed", "false") === "true";
 const RIGHT_CLICK = getStringParam("right-click", "false") === "true" || DEMO;
 
@@ -71,7 +74,7 @@ class KeyboardListener {
         clearNeighborMarks();
         break;
       case "m":
-        document.querySelector("#minesweeper").classList.toggle("show");
+        document.querySelector("#minesweeper")!.classList.toggle("show");
         break;
     }
   }
@@ -193,7 +196,7 @@ class Cell {
     } else if (keyboardListener.optionIsPressed) {
       this.highlightNeighbors();
     } else {
-      if (this.markChecked) {
+      if (this.markChecked()) {
         clearAnnotations({ clearNumbers: false, clearNeighborMarks: false });
       }
       this.toggleAliveNext();
@@ -202,7 +205,7 @@ class Cell {
 
   oncontextmenu(e: MouseEvent): boolean {
     e.preventDefault();
-    if (this.markChecked) {
+    if (this.markChecked()) {
       clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
     }
     if (RIGHT_CLICK) {
@@ -211,12 +214,12 @@ class Cell {
     return false;
   }
 
-  toggleAliveNow(value: boolean = undefined): void {
+  toggleAliveNow(value?: boolean ): void {
     this.aliveNow = value ?? !this.aliveNow;
     this.td.classList.toggle("alive-now", this.aliveNow);
   }
 
-  toggleAliveNext(value: boolean = undefined): void {
+  toggleAliveNext(value?: boolean ): void {
     this.aliveNext = value ?? !this.aliveNext;
     this.td.classList.toggle("alive-next", this.aliveNext);
     this.td.classList.toggle("dead-next", !this.aliveNext);
@@ -276,7 +279,7 @@ const cellGrid: Cell[][] = [];
 const allCells: Cell[] = [];
 for (let i = 0; i < NUM_ROWS; i++) {
   const tr = table.appendChild(document.createElement("tr"));
-  const row = [];
+  const row: Cell[] = [];
   for (let j = 0; j < NUM_COLS; j++) {
     const td = tr.appendChild(document.createElement("td"));
     const cell = new Cell(td);
@@ -286,7 +289,7 @@ for (let i = 0; i < NUM_ROWS; i++) {
   cellGrid.push(row);
 }
 
-document.querySelector("#board").appendChild(table);
+document.querySelector("#board")!.appendChild(table);
 
 for (let i = 0; i < NUM_ROWS; i++) {
   for (let j = 0; j < NUM_COLS; j++) {
@@ -333,12 +336,12 @@ function markChecked(): [allValid: boolean, invalid: number] {
   return [invalid === 0, invalid];
 }
 
-document.querySelector("#check").addEventListener("click", (e: Event) => {
+document.querySelector("#check")!.addEventListener("click", (e: Event) => {
   e.preventDefault();
   markChecked();
 });
 
-document.querySelector("#randomize").addEventListener("click", (e: Event) => {
+document.querySelector("#randomize")!.addEventListener("click", (e: Event) => {
   e.preventDefault();
   setRandom();
 });
@@ -346,7 +349,7 @@ document.querySelector("#randomize").addEventListener("click", (e: Event) => {
 for (const patternButton of document.querySelectorAll(".pattern")) {
   patternButton.addEventListener("click", (e: Event) => {
     e.preventDefault();
-    setPattern(patterns[patternButton.getAttribute("data-pattern")]);
+    setPattern(patterns[patternButton.getAttribute("data-pattern")!]);
   });
 }
 
@@ -375,19 +378,23 @@ stopElem.addEventListener("click", (e: Event) => {
 
 function setGeneration(gen: number): void {
   generation = gen;
-  document.querySelector("#generation").textContent = gen.toString();
+  document.querySelector("#generation")!.textContent = gen.toString();
 }
 
 document.addEventListener("gesturestart", function (e) {
   e.preventDefault();
 });
 
-function setRandom() {
+async function setRandom(): Promise<void> {
   clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
+  if (G4G) {
+    updateSeed()
+  }
   for (const cell of allCells) {
     cell.resetAlive(false);
   }
-  for (const cell of selectWithoutReplacement(allCells, NUM_INITIAL_ALIVE)) {
+  const selected = G4G ? selectWithoutReplacementSeeded( allCells, NUM_INITIAL_ALIVE) : selectWithoutReplacement(allCells, NUM_INITIAL_ALIVE);
+  for (const cell of await selected) {
     cell.resetAlive(true);
   }
   setGeneration(1);
@@ -415,7 +422,7 @@ if (ENABLE_SWIPING) {
 
 // Timing
 
-document.querySelector("#timed").addEventListener("click", (e: Event) => {
+document.querySelector("#timed")!.addEventListener("click", (e: Event) => {
   const url = new URL(location.href);
   url.searchParams.set("timed", (!TIMED).toString());
   location.href = url.toString();
@@ -457,15 +464,14 @@ if (TIMED) {
     startElem.hidden = false;
     stopElem.textContent = "Stop";
     stopElem.disabled = true;
-    (document.querySelector(
-      "#timed-description"
-    ) as HTMLButtonElement).hidden = false;
-    document.querySelector("#timed").textContent = "⏱ Exit timed mode";
+    (document.querySelector("#timed-description") as HTMLButtonElement).hidden =
+      false;
+    document.querySelector("#timed")!.textContent = "⏱ Exit timed mode";
   }
 
   startElem.addEventListener("click", (e: Event) => {
     setRandom();
-    timerGlobal.start();
+    timerGlobal?.start();
     clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
     startElem.disabled = true;
     stopElem.disabled = false;

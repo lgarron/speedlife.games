@@ -4,6 +4,7 @@
   },
   "dependencies": {
     "random-uint-below": "^0.5.0",
-    "timer-db": "^0.0.6"
+    "timer-db": "^0.0.6",
+    "unsafe-browser-aes": "^0.0.1"
   }
 }

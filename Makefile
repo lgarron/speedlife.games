@@ -1,6 +1,7 @@
 .PHONY: build
 build:
-	npx parcel build --public-url ./ index.html
+	# Workaround from https://github.com/parcel-bundler/parcel/issues/8005
+	env NODE_OPTIONS=--no-experimental-fetch npx parcel build --public-url ./ index.html
 
 .PHONY: dev
 dev:

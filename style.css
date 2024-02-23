@@ -26,7 +26,7 @@ html {
   place-content: center;
 }
 
-#subtitle {
+.subtitle {
   font-size: 1.4em;
   display: grid;
   place-content: center;
@@ -37,7 +37,7 @@ html {
   text-decoration: underline;
 }
 
-a#subtitle {
+a.subtitle {
   color: blue;
   text-decoration: none;
 }
