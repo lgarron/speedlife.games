@@ -1,7 +1,8 @@
-import { StatSnapshot } from "timer-db";
+import type { StatSnapshot } from "timer-db";
 import { patterns } from "./patterns";
 import { selectWithoutReplacement } from "./random";
 import "./timing";
+import { mustExist } from "./dom";
 import { Timer } from "./timing";
 import { SwipeTracker } from "./vendor/SwipeTracker";
 import { formatTime } from "./vendor/timer-db/format";
@@ -10,10 +11,12 @@ const ENABLE_SWIPING = getStringParam("swipe", "false") === "true";
 const DEMO = getStringParam("demo", "false") === "true";
 document.body.classList.toggle("demo", DEMO);
 if (DEMO) {
-  document
-    .querySelector("#second-panel")
-    .appendChild(document.querySelector("#patterns-wrapper"));
-  (document.querySelector("#challenge-wrapper")! as HTMLElement).hidden = true;
+  mustExist(document.querySelector("#second-panel")).appendChild(
+    mustExist(document.querySelector("#patterns-wrapper")),
+  );
+  mustExist(
+    document.querySelector("#challenge-wrapper") as HTMLElement,
+  ).hidden = true;
 }
 
 const TIMED = getStringParam("timed", "false") === "true";
@@ -30,8 +33,8 @@ class KeyboardListener {
   aliveNumbers: boolean = false;
   deadNumbers: boolean = false;
   constructor() {
-    window.addEventListener("keydown", this.keydown.bind(this));
-    window.addEventListener("keyup", this.keyup.bind(this));
+    globalThis.addEventListener("keydown", this.keydown.bind(this));
+    globalThis.addEventListener("keyup", this.keyup.bind(this));
   }
   keydown(e: KeyboardEvent): void {
     // console.log("keydown", e.key);
@@ -47,6 +50,7 @@ class KeyboardListener {
         this.aliveNumbers = false;
         break;
       case "a":
+        // biome-ignore lint/suspicious/noAssignInExpressions: Hmm
         if ((this.aliveNumbers = !this.aliveNumbers)) {
           setNumbers({ alive: true, zero: true });
         } else {
@@ -59,6 +63,7 @@ class KeyboardListener {
         this.deadNumbers = false;
         break;
       case "d":
+        // biome-ignore lint/suspicious/noAssignInExpressions: Hmm
         if ((this.deadNumbers = !this.deadNumbers)) {
           setNumbers({ dead: true });
         } else {
@@ -71,7 +76,9 @@ class KeyboardListener {
         clearNeighborMarks();
         break;
       case "m":
-        document.querySelector("#minesweeper").classList.toggle("show");
+        mustExist(document.querySelector("#minesweeper")).classList.toggle(
+          "show",
+        );
         break;
     }
   }
@@ -103,7 +110,7 @@ function getNumParam(name: string, defaultValue: number): number {
   if (!param) {
     return defaultValue;
   }
-  return parseInt(param) ?? defaultValue;
+  return parseInt(param, 10) ?? defaultValue;
 }
 
 const NUM_COLS = getNumParam("cols", 6);
@@ -112,7 +119,7 @@ const deltas = [-1, 0, 1];
 
 const FACTOR = 1.5;
 const DEFAULT_INITIAL_ALIVE = Math.floor(
-  Math.sqrt(NUM_COLS * NUM_ROWS) * FACTOR
+  Math.sqrt(NUM_COLS * NUM_ROWS) * FACTOR,
 );
 const NUM_INITIAL_ALIVE = getNumParam("alive", DEFAULT_INITIAL_ALIVE);
 
@@ -133,8 +140,9 @@ class Cell {
     this.td.addEventListener(
       "contextmenu",
       this.oncontextmenu.bind(this),
-      false
+      false,
     );
+    // biome-ignore lint/suspicious/noExplicitAny: TODO
     (this.td as any).cell = this; // for debugging
 
     this.dot.classList.add("dot");
@@ -186,37 +194,37 @@ class Cell {
     this.td.classList.toggle("dead-next", false);
   }
 
-  onclick(e: MouseEvent): void {
+  onclick(e: MouseEvent | TouchEvent): void {
     e.preventDefault();
     if (keyboardListener.shiftIsPressed) {
       this.toggleNumber(true);
     } else if (keyboardListener.optionIsPressed) {
       this.highlightNeighbors();
     } else {
-      if (this.markChecked) {
-        clearAnnotations({ clearNumbers: false, clearNeighborMarks: false });
-      }
+      // if (this.markChecked()) { // TODO
+      clearAnnotations({ clearNumbers: false, clearNeighborMarks: false });
+
       this.toggleAliveNext();
     }
   }
 
   oncontextmenu(e: MouseEvent): boolean {
     e.preventDefault();
-    if (this.markChecked) {
-      clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
-    }
+    // if (this.markChecked()) { // TODO
+    clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
+
     if (RIGHT_CLICK) {
       this.toggleAliveNow();
     }
     return false;
   }
 
-  toggleAliveNow(value: boolean = undefined): void {
+  toggleAliveNow(value?: boolean): void {
     this.aliveNow = value ?? !this.aliveNow;
     this.td.classList.toggle("alive-now", this.aliveNow);
   }
 
-  toggleAliveNext(value: boolean = undefined): void {
+  toggleAliveNext(value?: boolean): void {
     this.aliveNext = value ?? !this.aliveNext;
     this.td.classList.toggle("alive-next", this.aliveNext);
     this.td.classList.toggle("dead-next", !this.aliveNext);
@@ -286,7 +294,7 @@ for (let i = 0; i < NUM_ROWS; i++) {
   cellGrid.push(row);
 }
 
-document.querySelector("#board").appendChild(table);
+mustExist(document.querySelector("#board")).appendChild(table);
 
 for (let i = 0; i < NUM_ROWS; i++) {
   for (let j = 0; j < NUM_COLS; j++) {
@@ -333,19 +341,26 @@ function markChecked(): [allValid: boolean, invalid: number] {
   return [invalid === 0, invalid];
 }
 
-document.querySelector("#check").addEventListener("click", (e: Event) => {
-  e.preventDefault();
-  markChecked();
-});
+mustExist(document.querySelector("#check")).addEventListener(
+  "click",
+  (e: Event) => {
+    e.preventDefault();
+    markChecked();
+  },
+);
 
-document.querySelector("#randomize").addEventListener("click", (e: Event) => {
-  e.preventDefault();
-  setRandom();
-});
+mustExist(document.querySelector("#randomize")).addEventListener(
+  "click",
+  (e: Event) => {
+    e.preventDefault();
+    setRandom();
+  },
+);
 
 for (const patternButton of document.querySelectorAll(".pattern")) {
   patternButton.addEventListener("click", (e: Event) => {
     e.preventDefault();
+    // @ts-expect-error TODO
     setPattern(patterns[patternButton.getAttribute("data-pattern")]);
   });
 }
@@ -357,7 +372,7 @@ stopElem.addEventListener("click", (e: Event) => {
   const [success, numInvalid] = markChecked();
   if (success || ALLOW_INCORRECT_ADVANCEMENT) {
     if (TIMED) {
-      timerGlobal?.stop(numInvalid);
+      void timerGlobal?.stop(numInvalid);
       startElem.disabled = false;
       stopElem.disabled = true;
     } else {
@@ -375,10 +390,10 @@ stopElem.addEventListener("click", (e: Event) => {
 
 function setGeneration(gen: number): void {
   generation = gen;
-  document.querySelector("#generation").textContent = gen.toString();
+  mustExist(document.querySelector("#generation")).textContent = gen.toString();
 }
 
-document.addEventListener("gesturestart", function (e) {
+document.addEventListener("gesturestart", (e) => {
   e.preventDefault();
 });
 
@@ -407,19 +422,23 @@ function setPattern(pattern: string): void {
 // Swiping
 
 if (ENABLE_SWIPING) {
-  const tracker = new SwipeTracker(
+  new SwipeTracker(
     allCells.map((cell) => cell.td),
-    (sector) => ((sector as any).cell as Cell).toggleAliveNext()
+    // biome-ignore lint/suspicious/noExplicitAny: TODO
+    (sector) => ((sector as any).cell as Cell).toggleAliveNext(),
   );
 }
 
 // Timing
 
-document.querySelector("#timed").addEventListener("click", (e: Event) => {
-  const url = new URL(location.href);
-  url.searchParams.set("timed", (!TIMED).toString());
-  location.href = url.toString();
-});
+mustExist(document.querySelector("#timed")).addEventListener(
+  "click",
+  (_: Event) => {
+    const url = new URL(location.href);
+    url.searchParams.set("timed", (!TIMED).toString());
+    location.href = url.toString();
+  },
+);
 
 if (!TIMED && !DEMO) {
   setRandom();
@@ -448,7 +467,7 @@ if (TIMED) {
       //   .reverse()
       //   .map((attempt) => formatTime(attempt.resultTotalMs))
       //   .join(", ");
-    }
+    },
   );
 
   if (TIMED) {
@@ -457,15 +476,15 @@ if (TIMED) {
     startElem.hidden = false;
     stopElem.textContent = "Stop";
     stopElem.disabled = true;
-    (document.querySelector(
-      "#timed-description"
-    ) as HTMLButtonElement).hidden = false;
-    document.querySelector("#timed").textContent = "⏱ Exit timed mode";
+    (document.querySelector("#timed-description") as HTMLButtonElement).hidden =
+      false;
+    mustExist(document.querySelector("#timed")).textContent =
+      "⏱ Exit timed mode";
   }
 
-  startElem.addEventListener("click", (e: Event) => {
+  startElem.addEventListener("click", (_: Event) => {
     setRandom();
-    timerGlobal.start();
+    mustExist(timerGlobal).start();
     clearAnnotations({ clearNumbers: true, clearNeighborMarks: true });
     startElem.disabled = true;
     stopElem.disabled = false;
@@ -513,6 +532,9 @@ function toggleNumbers(options: {
   }
 }
 
-(window as any).setNumbers = setNumbers;
-(window as any).clearNumbers = clearNumbers;
-(window as any).toggleNumbers = toggleNumbers;
+// biome-ignore lint/suspicious/noExplicitAny: Debugging
+(globalThis as any).setNumbers = setNumbers;
+// biome-ignore lint/suspicious/noExplicitAny: Debugging
+(globalThis as any).clearNumbers = clearNumbers;
+// biome-ignore lint/suspicious/noExplicitAny: Debugging
+(globalThis as any).toggleNumbers = toggleNumbers;

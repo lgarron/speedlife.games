@@ -15,7 +15,7 @@ export class SwipeTracker {
   private activeTouches: ActiveTouch[] = [];
   constructor(
     private sectors: HTMLElement[],
-    private newSectorCallback: (elem: HTMLElement) => void
+    private newSectorCallback: (elem: HTMLElement) => void,
   ) {
     for (const [idx, sector] of this.sectors.entries()) {
       this.sectorIndices.set(sector, idx);
@@ -40,9 +40,9 @@ export class SwipeTracker {
     return this.activeTouches.includes(swipe as ActiveTouch);
   }
 
-  private idx(sector: HTMLElement): number {
-    return this.sectorIndices.get(sector);
-  }
+  // private idx(sector: HTMLElement): number {
+  //   return this.sectorIndices.get(sector);
+  // }
 
   private dispatchTouchChange(): void {
     // this.swipeChangeListener(this.activeTouches);
@@ -86,14 +86,14 @@ export class SwipeTracker {
       }
       const sectorUnderSwipe = document.elementFromPoint(
         touch.pageX,
-        touch.pageY
+        touch.pageY,
       ) as HTMLElement | null;
 
       if (!sectorUnderSwipe || !this.sectorIndices.has(sectorUnderSwipe)) {
         continue;
       }
 
-      if (activeTouch.currentSector !== sectorUnderSwipe) {
+      if (activeTouch && activeTouch.currentSector !== sectorUnderSwipe) {
         // console.log(
         //   `Touch #${
         //     activeTouch.touchIdentifier
@@ -120,14 +120,15 @@ export class SwipeTracker {
     }
   }
 
-  private touchEnd(sector: HTMLElement, e: TouchEvent): void {
+  private touchEnd(_sector: HTMLElement, e: TouchEvent): void {
     for (const touch of e.changedTouches) {
       // console.log("Ended touch #", touch.identifier);
       // console.log("touchEnd", sector, this.idx(sector), e);
       const activeTouch = this.activeTouchesByID.get(touch.identifier);
       this.activeTouchesByID.delete(touch.identifier);
 
-      const activeTouchIdx = this.activeTouches.indexOf(activeTouch);
+      // biome-ignore lint/suspicious/noExplicitAny: TODO
+      const activeTouchIdx = this.activeTouches.indexOf(activeTouch as any);
       this.activeTouches.splice(activeTouchIdx, 1);
 
       // this.swipeFinishListener(

@@ -1,4 +1,5 @@
-import { Session, StatSnapshot, TimerDB } from "timer-db";
+import { type Session, type StatSnapshot, TimerDB } from "timer-db";
+import { mustExist } from "./dom";
 
 const INVALID_CELL_PENALTY_MS = 10 * 1000;
 
@@ -9,12 +10,12 @@ export class Timer {
     eventID: string,
     eventName: string,
     private onTimeChange: (ms: number) => void,
-    private statCallback: (statsSnapShot: StatSnapshot) => void
+    private statCallback: (statsSnapShot: StatSnapshot) => void,
   ) {
     this.session = (async () => {
       this.timerDB.getSessions;
       const sessions = await this.timerDB.getSessions();
-      let session: Session;
+      let session: Session | undefined;
       for (const maybeSession of sessions) {
         if (maybeSession.eventID === eventID) {
           session = maybeSession;
@@ -24,7 +25,7 @@ export class Timer {
         session = await this.timerDB.createSession(eventName, eventID);
       }
       session.addStatListener(statCallback);
-      this.dispatchStatCallback();
+      void this.dispatchStatCallback();
       return session;
     })();
   }
@@ -43,7 +44,7 @@ export class Timer {
 
   rAF(): void {
     if (this.running) {
-      this.onTimeChange(Date.now() - this.startTime);
+      this.onTimeChange(Date.now() - mustExist(this.startTime));
       requestAnimationFrame(this.rAF.bind(this));
     }
   }
@@ -51,13 +52,15 @@ export class Timer {
   async stop(numInvalid: number): Promise<void> {
     this.running = false;
     const time =
-      Date.now() - this.startTime + numInvalid * INVALID_CELL_PENALTY_MS;
+      Date.now() -
+      mustExist(this.startTime) +
+      numInvalid * INVALID_CELL_PENALTY_MS;
     console.log(time, numInvalid);
     this.onTimeChange(time);
     await (await this.session).add({
       resultTotalMs: time,
       unixDate: Date.now(),
     });
-    this.dispatchStatCallback();
+    void this.dispatchStatCallback();
   }
 }
