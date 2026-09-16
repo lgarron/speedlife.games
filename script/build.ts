@@ -4,5 +4,5 @@ import { config } from "./dev";
 await barelyServe({
   ...config,
   dev: false,
-  outDir: "./dist/web/speedlife.games/",
+  outDir: "./dist/web/garron.net/math/speedlife/",
 });

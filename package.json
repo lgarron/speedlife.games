@@ -15,7 +15,7 @@
     "timer-db": "^0.0.6"
   },
   "@cubing/deploy": {
-    "https://speedlife.games/": {}
+    "https://garron.net/math/speedlife/": {}
   },
   "$schema": "./node_modules/@cubing/deploy/config-schema.package.json"
 }
